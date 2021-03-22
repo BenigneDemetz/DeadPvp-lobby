@@ -1,0 +1,46 @@
+name: DeadPvp
+api-version: 1.8
+version: 1.0
+authors: [Arnaud013, Benigne]
+main: net.DeadPvp.Main
+description: DPCore is a utility plugin for DeadPVP
+commands:
+  freeze:
+  vanich:
+  sm:
+    aliases: [staffmode, ba]
+  hub:
+  spawn:
+  fly:
+  heal:
+  feed:
+  speed:
+  dpreload:
+  tp:
+  world:
+  spec:
+
+permissions:
+  dp.*:
+    dp.builder:
+      default : false
+    dp.modo.*:
+      dp.modo.chat:
+        default : false
+      dp.modo.feed:
+        default : false
+      dp.modo.fly:
+        default : false
+      dp.modo.speed:
+        default : false
+      dp.modo.heal:
+        default : false
+      dp.modo.freeze:
+        default : false
+      dp.modo.vanich:
+        default : false
+      dp.modo.staffmode:
+        default : false
+    dp.admin.*:
+      dp.admin.chat:
+        default : false

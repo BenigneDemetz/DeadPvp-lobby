@@ -1,0 +1,71 @@
+#Mettre le nom de l'objet sous la forme de Bukkit https://helpch.at/docs/1.8/org/bukkit/Material.html
+KbTester : IRON_HOE
+InvSee : PAPER
+RandomTp : EGG
+MySQL : WRITTEN_BOOK
+TpWorldEdit : COMPASS
+Vanish : BLAZE_POWDER
+VanishAvecMsg : BLAZE_POWDER
+Freeze : ICE
+Commande : COMMAND
+
+#Commandes interdite en PvpSoup
+Commandes: [heal, feed, sm, fly, ba, staffmode]
+
+
+
+SpawnCmd:
+  Worlds:
+    spawn:
+      Location:
+        X: 1.5
+        Y: 46
+        Z: 0.5
+        Yaw: 90
+        Pitch: 0
+
+    PvpSoup:
+      Location:
+        X: -16.5
+        Y: 12
+        Z: -26.5
+        Yaw: 90
+        Pitch: 0
+
+    world:
+      Location:
+        X:
+        Y:
+        Z:
+        Yaw:
+        Pitch:
+
+    world_nether:
+      Location:
+        X:
+        Y:
+        Z:
+        Yaw:
+        Pitch:
+
+    world_the_end:
+      Location:
+        X:
+        Y:
+        Z:
+        Yaw:
+        Pitch:
+
+Bump:
+  world:
+    #nombre de bump
+    1:
+      #1 chiffre plus élevé et 2 chiffre plus bas
+      1:
+        X: 63
+        Y: 131
+        Z: 26
+      2:
+        X: 62
+        Y: 127
+        Z: 22
