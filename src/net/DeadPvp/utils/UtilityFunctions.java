@@ -90,11 +90,13 @@ public class UtilityFunctions {
                 ItemMeta iM = p.getInventory().getItem(7).getItemMeta();
                 iM.setDisplayName("§2§lCacher les joueurs");
                 p.getInventory().getItem(7).setItemMeta(iM);
+                Bukkit.getOnlinePlayers().forEach(target -> p.showPlayer(target));
             } else if (p.getInventory().getItem(7).getType().equals(Material.EYE_OF_ENDER)) {
                 p.getInventory().getItem(7).setType(Material.ENDER_PEARL);
                 ItemMeta iM = p.getInventory().getItem(7).getItemMeta();
                 iM.setDisplayName("§2§lAfficher les joueurs");
                 p.getInventory().getItem(7).setItemMeta(iM);
+                Bukkit.getOnlinePlayers().forEach(target -> p.hidePlayer(target));
             }
         }
     }
