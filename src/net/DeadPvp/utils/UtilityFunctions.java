@@ -48,8 +48,7 @@ public class UtilityFunctions {
         msg3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Ouvrir le Discord").create()));
         msg3.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/ugfsjrmA5j"));
 
-        player.sendMessage("§6\n"
-                + "\n§6§l   Bienvenue sur §cDEAD§9PVP   \n§c "
+        player.sendMessage("§6\n" + "\n§6§l   Bienvenue sur §cDEAD§9PVP   \n§c "
                 + "\n§b§l            LIEN");
         TextComponent espace = new TextComponent("   ");
         player.spigot().sendMessage(msg, msg1, msg2, msg3);

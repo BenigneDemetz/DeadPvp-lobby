@@ -44,21 +44,20 @@ public class EventListeners implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         e.setJoinMessage("");
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Location spawn = e.getPlayer().getLocation();
-                spawn.setX(0.5);
-                spawn.setY(50);
-                spawn.setZ(0.5);
-                spawn.setYaw(0);
-                spawn.setPitch(0);
-                e.getPlayer().teleport(spawn);
-            }
-        }.runTaskLater(Main.getInstance(),5L);
+        Location spawn = e.getPlayer().getLocation();
+        spawn.setX(0.5);
+        spawn.setY(50);
+        spawn.setZ(0.5);
+        spawn.setYaw(0);
+        spawn.setPitch(0);
+        e.getPlayer().teleport(spawn);
         e.getPlayer().getInventory().clear();
         UtilityFunctions.initLobby(e,e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
+        if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
+            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] §6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
+            e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
+        }
     }
 
     @EventHandler
@@ -369,7 +368,7 @@ public class EventListeners implements Listener {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
             Inventory inv = Bukkit.createInventory(null, 36,"§2§lSelection du mode de jeu");
             ItemBuilder grass = new ItemBuilder(Material.GRASS).setLore(" ").
-                            setName("§d§lCREATIF §c[EN MAINTENANCE]").addEnchant(Enchantment.ARROW_FIRE, 1);
+                            setName("§d§lCREATIF §c§l[EN MAINTENANCE]");
             inv.setItem(11, UtilityFunctions.iSDeleteDatas(grass.toItemStack()));
             ItemBuilder sword = new ItemBuilder(Material.DIAMOND_SWORD).setName("§c§lPVP§9§lSOUP").
                     addEnchant(Enchantment.ARROW_FIRE, 1).setLore(" ");
@@ -381,7 +380,7 @@ public class EventListeners implements Listener {
 
             for (int i = 0; i<inv.getSize(); ++i){
                 if (inv.getItem(i) == null) {
-                    inv.setItem(i, UtilityFunctions.voidItem());
+                    inv.setItem(i, UtilityFunctions.voidItem(DyeColor.BROWN));
                 }
             }
 
