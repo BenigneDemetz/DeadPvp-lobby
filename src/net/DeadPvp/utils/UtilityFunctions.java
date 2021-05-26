@@ -33,26 +33,7 @@ public class UtilityFunctions {
         player.sendPluginMessage(Main.getInstance(), "BungeeCord", doss.toByteArray());
     }
 
-    public static void initLobby(Event e, Player player) {
-        TextComponent msg = new TextComponent("§eSite web |");
-        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Ouvrir le site").create()));
-        msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://deadpvp.fr/"));
-        TextComponent msg1 = new TextComponent(" §dBoutique §e|");
-        msg1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Ouvrir la boutique").create()));
-        msg1.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://deadpvp.fr/shop"));
-
-        TextComponent msg2 = new TextComponent(" §eForum |");
-        msg2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Ouvrir le Forum").create()));
-        msg2.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://deadpvp.fr/???"));
-        TextComponent msg3 = new TextComponent(" §9Discord");
-        msg3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Ouvrir le Discord").create()));
-        msg3.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/ugfsjrmA5j"));
-
-        player.sendMessage("§6\n" + "\n§6§l   Bienvenue sur §cDEAD§9PVP   \n§c "
-                + "\n§b§l            LIEN");
-        TextComponent espace = new TextComponent("   ");
-        player.spigot().sendMessage(msg, msg1, msg2, msg3);
-        player.sendMessage("\n");
+    public static void initLobby(Player player) {
         ItemBuilder compass = new ItemBuilder(Material.COMPASS).setName("§2§lSelection du mode de jeu");
         player.getInventory().setItem(4, compass.toItemStack());
 
