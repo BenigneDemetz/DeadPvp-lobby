@@ -326,11 +326,11 @@ public class EventListeners implements Listener {
     }
 
     public static String getPrefix(Player p) {
-        if (p.hasPermission("chat.admin")) return "§c[Admin] §6";
-        if (p.hasPermission("chat.modo")) return "§b[Modo] §6";
+        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §6";
+        if (p.hasPermission("chat.modo")) return "§b[Modérateur] §6";
+        if (p.hasPermission("chat.dev")) return "§d[Développeur] §6";
         if (p.hasPermission("chat.builder")) return "§a[Builder] §6";
         else return "§7";
-
     }
 
     public static boolean isBetween (Player p) {
