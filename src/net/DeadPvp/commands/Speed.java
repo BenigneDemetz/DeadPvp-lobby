@@ -18,7 +18,9 @@ public class Speed implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            if (p.hasPermission("dp.modo.speed")) {
+            if (p.hasPermission("deadpvp.speed")) {
+                int walkSpeed = (int) (p.getWalkSpeed()*10);
+                int flySpeed = (int) (p.getFlySpeed()*10);
                 if (args.length >= 1) {
                     if (p.isFlying()) {
                         p.setFlySpeed(Float.parseFloat(args[0]) / 10);
@@ -28,8 +30,12 @@ public class Speed implements CommandExecutor {
                         p.sendMessage("Speed au sol : " + args[0]);
                     }
                 }
+                else p.sendMessage("Tu vol en vitesse : " +flySpeed +
+                        "\nTu marches en vitesse : " + walkSpeed);
             }
+            else sender.sendMessage("§cTu n'as pas la permission d'utiliser cette commande !");
         }
+        else sender.sendMessage("Tu n'es pas un joueur");
 
 
         return false;

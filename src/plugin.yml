@@ -16,9 +16,17 @@ commands:
   feed:
   speed:
   dpreload:
-  tp:
+  dtp:
   world:
+    permission: :deadpvp.world
   spec:
+    permission: deadpvp.spectator
+  stoplag:
+  pvpsoup:
+    aliases: [ps]
+  creatif:
+    aliases: [crea]
+  msg:
 
 permissions:
   dp.*:
