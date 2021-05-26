@@ -15,7 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftItemFrame;
+import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
@@ -380,14 +380,14 @@ public class EventListeners implements Listener {
             Inventory inv = Bukkit.createInventory(null, 36,"§2§lSelection du mode de jeu");
             ItemBuilder grass = new ItemBuilder(Material.GRASS).setLore(" ").
                             setName("§d§lCREATIF §c[EN MAINTENANCE]").addEnchant(Enchantment.ARROW_FIRE, 1);
-            inv.setItem(11, grass.toItemStack());
+            inv.setItem(11, UtilityFunctions.iSDeleteDatas(grass.toItemStack()));
             ItemBuilder sword = new ItemBuilder(Material.DIAMOND_SWORD).setName("§c§lPVP§9§lSOUP").
                     addEnchant(Enchantment.ARROW_FIRE, 1).setLore(" ");
-            inv.setItem(13, sword.toItemStack());
+            inv.setItem(13, UtilityFunctions.iSDeleteDatas(sword.toItemStack()));
             ItemBuilder barrier = new ItemBuilder(Material.BARRIER).setName("§4Maintenance").setLore(" ");
-            inv.setItem(15, barrier.toItemStack());
+            inv.setItem(15, UtilityFunctions.iSDeleteDatas(barrier.toItemStack()));
             ItemBuilder paper = new ItemBuilder(Material.PAPER).setName("§d§lSite de DeadPVP").setLore(" ");
-            inv.setItem(31, paper.toItemStack());
+            inv.setItem(31, UtilityFunctions.iSDeleteDatas(paper.toItemStack()));
 
             for (int i = 0; i<inv.getSize(); ++i){
                 if (inv.getItem(i) == null) {

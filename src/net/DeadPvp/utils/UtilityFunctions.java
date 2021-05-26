@@ -75,12 +75,14 @@ public class UtilityFunctions {
     }
 
     public static ItemStack iSDeleteDatas(ItemStack iS) {
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_DESTROYS);
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_PLACED_ON);
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        iS.getItemMeta().removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+        ItemMeta iM = iS.getItemMeta();
+        iM.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        iM.removeItemFlags(ItemFlag.HIDE_DESTROYS);
+        iM.removeItemFlags(ItemFlag.HIDE_PLACED_ON);
+        iM.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        iM.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        iM.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+        iS.setItemMeta(iM);
         return iS;
     }
 
