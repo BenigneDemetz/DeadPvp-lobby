@@ -43,6 +43,7 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        e.getPlayer().setGameMode(GameMode.SURVIVAL);
         e.setJoinMessage("");
         Location spawn = e.getPlayer().getLocation();
         spawn.setX(0.5);
