@@ -63,9 +63,10 @@ public class UtilityFunctions {
         player.getInventory().setItem(1, trails.toItemStack());
     }
 
-    public static ItemStack voidItem() {
-        ItemBuilder glasspane = new ItemBuilder(Material.STAINED_GLASS_PANE).setDyeColor(DyeColor.WHITE).setName(" ")
+    public static ItemStack voidItem(DyeColor color) {
+        ItemBuilder glasspane = new ItemBuilder(Material.STAINED_GLASS_PANE).setDyeColor(color).setName(" ")
                 .setLore(" ");
+        glasspane.setDyeColor(color);
         return UtilityFunctions.iSDeleteDatas(glasspane.toItemStack());
     }
 
@@ -80,6 +81,7 @@ public class UtilityFunctions {
         iS.setItemMeta(iM);
         return iS;
     }
+
 
     public static void showHidePlayers(Player p) {
         if (p.getInventory().getItem(7) != null) {
