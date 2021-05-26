@@ -1,10 +1,8 @@
 package net.DeadPvp.utils;
 
-import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.DeadPvp.Main;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -12,13 +10,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -76,12 +72,12 @@ public class UtilityFunctions {
 
     public static ItemStack iSDeleteDatas(ItemStack iS) {
         ItemMeta iM = iS.getItemMeta();
-        iM.removeItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        iM.removeItemFlags(ItemFlag.HIDE_DESTROYS);
-        iM.removeItemFlags(ItemFlag.HIDE_PLACED_ON);
-        iM.removeItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        iM.removeItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-        iM.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+        iM.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        iM.addItemFlags(ItemFlag.HIDE_DESTROYS);
+        iM.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+        iM.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        iM.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        iM.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         iS.setItemMeta(iM);
         return iS;
     }

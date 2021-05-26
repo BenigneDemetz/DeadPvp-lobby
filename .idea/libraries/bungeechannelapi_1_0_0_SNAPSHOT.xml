@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bungeechannelapi-1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../ressources/bungeechannelapi-1.0.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

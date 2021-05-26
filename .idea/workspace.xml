@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aeea7c03-1f35-4595-9fc0-18c7424c469d" name="Default Changelist" comment="modification et utlisation de iSDeleteDatas">
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/DeadPvp/event/EventListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/DeadPvp/event/EventListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/DeadPvp/utils/UtilityFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/DeadPvp/utils/UtilityFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/.idea/artifacts/DeadPvp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/.idea/artifacts/DeadPvp.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Event/EventListeners$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Event/EventListeners$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Event/EventListeners.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Event/EventListeners.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/net/DeadPvp/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/out/production/DeadPvp/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/commands/Hub.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/commands/Hub.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/commands/Spawn.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/commands/Spawn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/event/EventListeners.java" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/src/net/DeadPvp/event/EventListeners.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../DeadPvp/src/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../DeadPvp/src/plugin.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../DeadPvp - lobby\exportToHTML" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="22a6968f-739e-4dd5-978c-ca066144f6f3" />
+  </component>
+  <component name="ProjectId" id="1jvfqTXDZyuyKVZk5KmfIj3IuPj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1596838915978" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../ressources/bungeechannelapi-1.0.0-SNAPSHOT.jar" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\DeadPvp\Serv 1.8\TiensMonArno-3\DeadPvp\Serv 1.8\DeadPvp\src" />
+      <recent name="D:\DeadPvp\Serv 1.8\DeadPvp\src" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.DeadPvp.commands" />
+      <recent name="net.granoLaife.Event" />
+      <recent name="net.granoLaife.Utils" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\DeadPvp\Serv 1.8\DeadPvp\src\net\DeadPvp" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aeea7c03-1f35-4595-9fc0-18c7424c469d" name="Default Changelist" comment="" />
+      <created>1594736717747</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1594736717747</updated>
+    </task>
+    <task id="LOCAL-00001" summary="first commit">
+      <created>1622026321628</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1622026321628</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first commit">
+      <created>1622026621043</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1622026621043</updated>
+    </task>
+    <task id="LOCAL-00003" summary="modification et utlisation de iSDeleteDatas">
+      <created>1622040274936</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1622040274936</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../../../../../../" />
+    </ignored-roots>
+    <MESSAGE value="first commit" />
+    <MESSAGE value="modification et utlisation de iSDeleteDatas" />
+    <option name="LAST_COMMIT_MESSAGE" value="modification et utlisation de iSDeleteDatas" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621650644656">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1621650644656" />
+    <state x="553" y="132" key="#com.intellij.ide.util.MemberChooser" timestamp="1621970618901">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="553" y="132" key="#com.intellij.ide.util.MemberChooser/0.0.1536.864@0.0.1536.864" timestamp="1621970618901" />
+    <state x="449" y="168" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1619809579349">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="449" y="168" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1536.864@0.0.1536.864" timestamp="1619809579349" />
+    <state x="499" y="179" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1621958959880">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="499" y="179" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.864@0.0.1536.864" timestamp="1621958959880" />
+    <state x="512" y="267" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1621687840677">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="512" y="267" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.864@0.0.1536.864" timestamp="1621687840677" />
+    <state x="93" y="93" width="1350" height="678" key="DiffContextDialog" timestamp="1622040030801">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="93" y="93" width="1350" height="678" key="DiffContextDialog/0.0.1536.864@0.0.1536.864" timestamp="1622040030801" />
+    <state x="224" y="180" key="FileChooserDialogImpl" timestamp="1621880994344">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="224" y="180" key="FileChooserDialogImpl/0.0.1536.864@0.0.1536.864" timestamp="1621880994344" />
+    <state x="627" y="343" key="Github.Dialog.Accounts.Choose" timestamp="1622026433739">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="627" y="343" key="Github.Dialog.Accounts.Choose/0.0.1536.864@0.0.1536.864" timestamp="1622026433739" />
+    <state x="490" y="51" key="RollbackChangesDialog" timestamp="1622039854222">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="490" y="51" key="RollbackChangesDialog/0.0.1536.864@0.0.1536.864" timestamp="1622039854222" />
+    <state x="277" y="13" key="SettingsEditor" timestamp="1622040514268">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="277" y="13" key="SettingsEditor/0.0.1536.864@0.0.1536.864" timestamp="1622040514268" />
+    <state x="209" y="153" key="Vcs.Push.Dialog.v2" timestamp="1622040277853">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="209" y="153" key="Vcs.Push.Dialog.v2/0.0.1536.864@0.0.1536.864" timestamp="1622040277853" />
+    <state x="587" y="342" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1622040046965">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="587" y="342" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.864@0.0.1536.864" timestamp="1622040046965" />
+    <state x="291" y="290" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1622026457635">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="291" y="290" key="git4idea.remote.GitConfigureRemotesDialog/0.0.1536.864@0.0.1536.864" timestamp="1622026457635" />
+    <state x="209" y="52" key="new project wizard" timestamp="1614537678546">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="209" y="52" key="new project wizard/0.0.1536.864@0.0.1536.864" timestamp="1614537678546" />
+    <state x="471" y="185" key="refactoring.ChangeSignatureDialog" timestamp="1621818082386">
+      <screen x="0" y="0" width="1536" height="864" />
+    </state>
+    <state x="471" y="185" key="refactoring.ChangeSignatureDialog/0.0.1536.864@0.0.1536.864" timestamp="1621818082386" />
+  </component>
+</project>

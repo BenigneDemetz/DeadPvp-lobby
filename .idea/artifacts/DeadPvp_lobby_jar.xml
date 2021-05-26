@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="DeadPvp-lobby:jar">
+    <output-path>$PROJECT_DIR$/../DeadPvp/out/artifacts/DeadPvp_jar</output-path>
+    <root id="archive" name="DeadPvp-lobby.jar">
+      <element id="module-output" name="DeadPvp" />
+    </root>
+  </artifact>
+</component>
