@@ -5,7 +5,6 @@ import net.DeadPvp.utils.UtilityFunctions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import us.myles.*;
 import us.myles.ViaVersion.api.Via;

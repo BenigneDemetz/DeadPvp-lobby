@@ -6,7 +6,6 @@ import net.DeadPvp.utils.AdminInv;
 import net.DeadPvp.utils.GuiMenu;
 import net.DeadPvp.utils.ItemBuilder;
 import net.DeadPvp.utils.VanichUtil;
-import net.minecraft.server.v1_8_R1.EntityEgg;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;

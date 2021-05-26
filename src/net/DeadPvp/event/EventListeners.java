@@ -1,6 +1,5 @@
 package net.DeadPvp.event;
 
-import Crd.Code.Handler;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.DeadPvp.Main;
@@ -16,8 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
