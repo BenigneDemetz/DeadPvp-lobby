@@ -30,7 +30,6 @@ public class Hub implements CommandExecutor {
 //            p.teleport(spawn);
 //        } else
 //            {
-            UtilityFunctions.tpToServ(p, "lobby");
 //        }
             new BukkitRunnable() {
                 @Override

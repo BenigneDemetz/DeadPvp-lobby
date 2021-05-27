@@ -27,6 +27,7 @@ commands:
   creatif:
     aliases: [crea]
   msg:
+  npc:
 
 permissions:
   dp.*:

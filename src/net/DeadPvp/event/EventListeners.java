@@ -11,6 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -206,6 +207,7 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void painting (EntityDamageByEntityEvent e) {
+        e.setCancelled(true);
         try {
             if (e.getDamager() instanceof Player)
                 e.setCancelled(((e.getEntity().getType().equals(EntityType.PAINTING) ||
@@ -239,7 +241,12 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onInteractEntity(PlayerInteractAtEntityEvent e) {
-        if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+        if (e.getRightClicked() == Main.getInstance().robert)
+        {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage("vote");
+        }
+        else if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
         {
             if(e.getRightClicked() instanceof ItemFrame ||
                     e.getRightClicked() instanceof CraftItemFrame ||
