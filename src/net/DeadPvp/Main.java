@@ -113,7 +113,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     private void registerCmd() {
-        getCommand("vanich").setExecutor(new Vanich());
+        getCommand("vanish").setExecutor(new Vanich());
         getCommand("freeze").setExecutor(new Freeze());
         getCommand("hub").setExecutor(new Hub(this));
         getCommand("spawn").setExecutor(new Spawn());

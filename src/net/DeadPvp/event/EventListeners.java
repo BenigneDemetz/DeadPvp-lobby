@@ -30,6 +30,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,32 +120,10 @@ public class EventListeners implements Listener {
         if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
         {
             UtilityFunctions.tpToServ(p, "pvpsoup");
+
+            p.setVelocity(new Vector(0,2,-5));
         }
-        if (isBetween(p) && !p.getGameMode().equals(GameMode.CREATIVE)){
-            Location loc = p.getLocation();
-            if ((loc.getX() <= -32 &&
-                    loc.getX() >= -47 &&
-                    loc.getY() <= 50 &&
-                    loc.getY() >= 42 &&
-                    loc.getZ() <= -96 &&
-                    loc.getZ() >= -100))
-            {
-                p.setVelocity(p.getVelocity().setY(1.2));
-                p.setVelocity(p.getVelocity().setZ(1.4));
-            }
-            else {
-                p.setVelocity(p.getVelocity().setY(2));
-                p.setVelocity(p.getVelocity().setZ(10));
-            }
-            Main.getInstance().hasJump.add(p);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (Main.getInstance().hasJump.contains(p))
-                    Main.getInstance().hasJump.remove(p);
-                }
-            }.runTaskLater(Main.getInstance(), 100L);
-        }
+
     }
 
     @EventHandler
@@ -152,7 +131,6 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onClickInv (InventoryClickEvent e) {
-        e.setCancelled(!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§c§lPVP§9§lSOUP")
         {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
@@ -160,6 +138,11 @@ public class EventListeners implements Listener {
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lCREATIF")
         {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+        }
+        if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lSite de DeadPVP"){
+            e.getWhoClicked().sendMessage("§2§ldeadpvp.fr");
+            e.getWhoClicked().closeInventory();
+
         }
     }
 
