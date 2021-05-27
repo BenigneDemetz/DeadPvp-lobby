@@ -5,8 +5,10 @@ import net.DeadPvp.commands.World;
 import net.DeadPvp.utils.*;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Main extends JavaPlugin implements Listener {
 
@@ -39,6 +42,8 @@ public class Main extends JavaPlugin implements Listener {
     public ArrayList<Player> hasJump = new ArrayList<>();
     public ArrayList<Player> specItemMode = new ArrayList<>();
     public boolean stopLag = false;
+    public Entity robert;
+    public Location robertLoc;
 
     private static Main instance;
 
@@ -85,7 +90,10 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
         new Permission("b.admin");
         mysqlSetup();
-
+//        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
+//            Recipe recipe = it.next();
+//            if (recipe != null) it.remove();
+//        }
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         saveDefaultConfig();
         instance = this;
@@ -94,6 +102,16 @@ public class Main extends JavaPlugin implements Listener {
         restartServ();
         getServer ().getMessenger ().registerOutgoingPluginChannel (this, "BungeeCord"); // ECRIT EXACTEMENT EXACTEMENT SA A LA MAJ PRET SINN SA MARCHE PAS
 
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (robert != null)
+                {
+                    if (robertLoc != null)
+                        robert.teleport(robertLoc);
+                }
+            }
+        }.runTaskTimer(this, 1,1);
 
         super.onEnable();
     }
@@ -127,6 +145,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("stoplag").setExecutor(new StopLag());
         getCommand("pvpsoup").setExecutor(new Pvpsoup());
         getCommand("creatif").setExecutor(new Creatif());
+        getCommand("npc").setExecutor(new npc());
     }
 
     public void restartServ() {
