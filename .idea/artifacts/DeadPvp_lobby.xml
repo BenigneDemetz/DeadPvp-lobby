@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="DeadPvp-lobby">
-    <output-path>$PROJECT_DIR$/../../../../../../bureau/le vrai serv tavu/server vincent bastien/plugins</output-path>
-    <root id="archive" name="DeadPvp-lobby.jar">
-      <element id="module-output" name="DeadPvp" />
-      <element id="library" level="project" name="SuperLogin" />
-    </root>
-  </artifact>
-</component>
