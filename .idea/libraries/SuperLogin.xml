@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="SuperLogin">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../ressources/SuperLogin.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

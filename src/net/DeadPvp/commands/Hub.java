@@ -1,25 +1,13 @@
 package net.DeadPvp.commands;
 
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import net.DeadPvp.Main;
-import net.DeadPvp.utils.ItemBuilder;
 import net.DeadPvp.utils.UtilityFunctions;
-import net.DeadPvp.utils.VanichUtil;
-import net.md_5.bungee.api.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ProxiedCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class Hub implements CommandExecutor {
 
@@ -55,9 +43,9 @@ public class Hub implements CommandExecutor {
                     spawn.setPitch(0);
                     p.teleport(spawn);
 
-                    ItemBuilder compass = new ItemBuilder(Material.COMPASS).setName("§aChoisir mode de jeu");
                     p.getInventory().clear();
-                    p.getInventory().setItem(4, compass.toItemStack());
+
+                    UtilityFunctions.initLobby(p);
 
                 }
             }.runTaskLater(main, 5);

@@ -52,7 +52,7 @@ public class Main extends JavaPlugin implements Listener {
         port = 3306;
         database = "minecraft";
         username = "root";
-        password = "23012002m";
+        password = "";
 
         try{
 
@@ -93,7 +93,6 @@ public class Main extends JavaPlugin implements Listener {
         registerCmd();
         restartServ();
         getServer ().getMessenger ().registerOutgoingPluginChannel (this, "BungeeCord"); // ECRIT EXACTEMENT EXACTEMENT SA A LA MAJ PRET SINN SA MARCHE PAS
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", (PluginMessageListener) this);
 
 
         super.onEnable();

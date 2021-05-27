@@ -9,10 +9,8 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -32,14 +30,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class EventListeners implements Listener {
 
     Main main;
-    List<String> bannedCommands = new ArrayList<String>();
 
 
     @EventHandler
@@ -54,7 +48,7 @@ public class EventListeners implements Listener {
         spawn.setPitch(0);
         e.getPlayer().teleport(spawn);
         e.getPlayer().getInventory().clear();
-        UtilityFunctions.initLobby(e,e.getPlayer());
+        UtilityFunctions.initLobby(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
         if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
             Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] §6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
@@ -103,8 +97,6 @@ public class EventListeners implements Listener {
         Player player = e.getEntity().getPlayer();
         Location pos = player.getLocation().getBlock().getLocation();
         player.getWorld().strikeLightningEffect(pos);
-        Random rdn = new Random();
-
     } //Eclair Mort
 
 
@@ -123,7 +115,6 @@ public class EventListeners implements Listener {
 
             p.setVelocity(new Vector(0,2,-5));
         }
-
     }
 
     @EventHandler
@@ -205,13 +196,7 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void looseFood(FoodLevelChangeEvent e) {
-        try {
-            e.setCancelled(true);
-            if (e.getEntity() instanceof Player) {
-                e.setCancelled(true);
-            }
-        } catch (Exception ignored) {
-        }
+        e.setCancelled(true);
     }
 
     @EventHandler
@@ -254,8 +239,7 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onInteractEntity(PlayerInteractAtEntityEvent e) {
-        if (e.getPlayer().getServer().getServerName().contains("pvpsoup") &&
-                !e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
+        if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE))
         {
             if(e.getRightClicked() instanceof ItemFrame ||
                     e.getRightClicked() instanceof CraftItemFrame ||
@@ -264,7 +248,6 @@ public class EventListeners implements Listener {
                 ItemFrame itemframe = (ItemFrame) e.getRightClicked();
                 itemframe.setRotation(Rotation.COUNTER_CLOCKWISE_45);
             }
-            if (e.getRightClicked() instanceof EnderCrystal) e.setCancelled(true);
         }
     }
 
@@ -309,44 +292,15 @@ public class EventListeners implements Listener {
     }
 
     public static String getPrefix(Player p) {
-        if (p.hasPermission("chat.admin")) return "§c[Admin] §6";
-        if (p.hasPermission("chat.modo")) return "§b[Modo] §6";
+        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §6";
+        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
+        if (p.hasPermission("chat.dev")) return "§d[Développeur] §6";
         if (p.hasPermission("chat.builder")) return "§a[Builder] §6";
+        if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §6";
+        if (p.hasPermission("chat.vip")) return "§b[VIP] §6";
         else return "§7";
-
     }
 
-    public static boolean isBetween (Player p) {
-        Location loc = p.getLocation();
-        FileConfiguration fConf = Main.getInstance().getConfig();
-        if ((loc.getX() <= -38 &&
-                loc.getX() >= -41 &&
-                loc.getY() <= 61 &&
-                loc.getY() >= 56 &&
-                loc.getZ() <= -101 &&
-                loc.getZ() >= -101.699) ||
-
-                (loc.getX() <= -32 &&
-                loc.getX() >= -47 &&
-                loc.getY() <= 50 &&
-                loc.getY() >= 42 &&
-                loc.getZ() <= -96 &&
-                loc.getZ() >= -100)){
-            return true;
-        }
-//        if (loc.getX() <= fConf.getDouble("Bump.world.1.1.X") &&
-//                loc.getX() >= fConf.getDouble("Bump.world.1.2.X") &&
-//                loc.getY() <= fConf.getDouble("Bump.world.1.1.Y") &&
-//                loc.getY() >= fConf.getDouble("Bump.world.1.2.Y") &&
-//                loc.getZ() <= fConf.getDouble("Bump.world.1.1.Z") &&
-//                loc.getZ() >= fConf.getDouble("Bump.world.1.2.Z")){
-//            Bukkit.broadcastMessage("2");
-//            return true;
-//        }
-        for (int i = 1; i <= fConf.getInt("Bump.world"); ++i) {
-        }
-        return false;
-    }
 
     public static void compassEvent (Event e, Player player, ItemStack it) {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
