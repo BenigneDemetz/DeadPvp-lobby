@@ -109,10 +109,12 @@ public class EventListeners implements Listener {
                 e.setTo(e.getFrom());
             }
         }
+        if (Main.getInstance().isWaiting.contains(p)) return;
         if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
         {
             UtilityFunctions.tpToServ(p, "pvpsoup");
         }
+        StaffModeEventListener.pause(p,1);
     }
 
     @EventHandler
@@ -123,11 +125,23 @@ public class EventListeners implements Listener {
         e.setCancelled(!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§c§lPVP§9§lSOUP")
         {
-                    UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
+                    try {
+                        UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
+                    }
+                    catch (Exception ee)
+                    {
+                        e.getWhoClicked().sendMessage("Il y a eu une erreur, contact un administrateur");
+                    }
         }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lCREATIF")
         {
+            try {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+        }
+                    catch (Exception ee)
+        {
+            e.getWhoClicked().sendMessage("Il y a eu une erreur, contact un administrateur");
+        }
         }
     }
 
