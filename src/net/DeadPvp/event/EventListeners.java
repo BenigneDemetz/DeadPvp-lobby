@@ -28,6 +28,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 
 public class EventListeners implements Listener {
@@ -111,6 +112,8 @@ public class EventListeners implements Listener {
         if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
         {
             UtilityFunctions.tpToServ(p, "pvpsoup");
+
+            p.setVelocity(new Vector(0,2,-5));
         }
     }
 
@@ -119,7 +122,6 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onClickInv (InventoryClickEvent e) {
-        e.setCancelled(!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§c§lPVP§9§lSOUP")
         {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
@@ -127,6 +129,11 @@ public class EventListeners implements Listener {
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lCREATIF")
         {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+        }
+        if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lSite de DeadPVP"){
+            e.getWhoClicked().sendMessage("§2§ldeadpvp.fr");
+            e.getWhoClicked().closeInventory();
+
         }
     }
 
