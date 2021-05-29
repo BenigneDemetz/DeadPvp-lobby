@@ -1,6 +1,7 @@
 package net.DeadPvp.event;
 
 import net.DeadPvp.Main;
+import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.AdminInv;
 import net.DeadPvp.utils.ItemBuilder;
 import net.DeadPvp.utils.UtilityFunctions;
@@ -29,12 +30,17 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
+
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class EventListeners implements Listener {
 
     Main main;
+
 
 
     @EventHandler
@@ -50,11 +56,13 @@ public class EventListeners implements Listener {
         e.getPlayer().teleport(spawn);
         e.getPlayer().getInventory().clear();
         UtilityFunctions.initLobby(e.getPlayer());
+        setScoreboard(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
         if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
             Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
+
     }
 
     @EventHandler
@@ -337,5 +345,83 @@ public class EventListeners implements Listener {
 
 
         }
+    }
+    public static void updateScoreboard(Player player){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.getObjective("DPScoreboard");
+
+
+
+        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
+        Date date = new Date();
+        int x = 22-date.getHours();
+        int y = 60-date.getMinutes();
+        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        String y2;
+        if (y < 10){
+            int temp = y;
+            y2 = "0"+y;
+        }else{
+            y2 = ""+y;
+        }
+        objective.setDisplayName("§cOKK");
+        Score score7 = objective.getScore("§b§l   dans "+x+"h"+y2);
+
+        score7.setScore(7);
+        player.setScoreboard(board);
+
+
+    }
+    public void setScoreboard(Player p){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName("§c§lDEAD§1§lPVP");
+        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
+        Date date = new Date();
+        int x = 22-date.getHours();
+        int y = 60-date.getMinutes();
+        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        String y2;
+        if (y < 10){
+            int temp = y;
+            y2 = "0"+y;
+        }else{
+            y2 = ""+y;
+        }
+        Score score14 = objective.getScore("§b§l---------------§r");
+        Score score13 = objective.getScore("§5§l§r ");
+        Score score12 = objective.getScore("§6>>> Connectés :");
+        Score score11 = objective.getScore("    §c"+nbrjoueur+"§6 joueurs");
+        Score score10 = objective.getScore("§4§l ");
+        Score score9 = objective.getScore("§6>>> §6Phase Beta :");
+        Score score8 = objective.getScore("§b§l   Fin de la beta");
+        Score score7 = objective.getScore("§b§l   dans "+x+"h"+y2);
+        Score score6 = objective.getScore("§7§l§r ");
+        Score score5 = objective.getScore("§6>>> DP :");
+        Score score4 = objective.getScore("    §cA venir ...");
+        Score score3 = objective.getScore("§f§l");;
+        Score score2 = objective.getScore("§b§l---------------");
+        Score score1 = objective.getScore("§c§l§r ");
+        Score score0 = objective.getScore("§cmc.deadpvp.fr");
+
+        score14.setScore(14);
+        score13.setScore(13);
+        score12.setScore(12);
+        score11.setScore(11);
+        score10.setScore(10);
+        score9.setScore(9);
+        score8.setScore(8);
+        score7.setScore(7);
+        score6.setScore(6);
+        score5.setScore(5);
+        score4.setScore(4);
+        score3.setScore(3);
+        score2.setScore(2);
+        score1.setScore(1);
+        score0.setScore(0);
+        p.setScoreboard(board);
     }
 }
