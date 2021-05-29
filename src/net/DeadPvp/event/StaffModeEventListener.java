@@ -75,7 +75,7 @@ public class StaffModeEventListener implements Listener {
         if (Main.getInstance().staffModePlayers.contains(p)) {
             e.setCancelled(true);
             if (!Main.getInstance().isWaiting.contains(p)) {
-                pause(p);
+                pause(p,1);
                 Entity target = e.getRightClicked();
 
                 if (p.getItemInHand().getType() == Material.IRON_HOE) {
@@ -106,7 +106,7 @@ public class StaffModeEventListener implements Listener {
         if (Main.getInstance().staffModePlayers.contains(p)) {
             e.setCancelled(true);
             if (!Main.getInstance().isWaiting.contains(p)) {
-                pause(p);
+                pause(p,1);
                 switch (e.getItem().getType()) {
                     case EGG:
                         for (Player ponline : Bukkit.getOnlinePlayers()) {
@@ -215,7 +215,7 @@ public class StaffModeEventListener implements Listener {
             Material m = is.getType();
             if (Main.getInstance().staffModePlayers.contains(p)) {
                 e.setCancelled(true);
-                pause(p);
+                pause(p,1);
                 Player targetPlayer = Bukkit.getPlayer(p.getOpenInventory().getTitle().substring(2));
                 if (Main.getInstance().isWaiting.contains(p)) {
                     switch (m) {
@@ -351,14 +351,14 @@ public class StaffModeEventListener implements Listener {
 
     }
 
-    public void pause(Player p){
+    public static void pause(Player p, long snd){
       Main.getInstance().isWaiting.add(p);
         new BukkitRunnable() {
             @Override
             public void run() {
                 Main.getInstance().isWaiting.remove(p);
             }
-        }.runTaskLater(Main.getInstance(), 20L);
+        }.runTaskLater(Main.getInstance(), 20L * snd);
     }
 
 }

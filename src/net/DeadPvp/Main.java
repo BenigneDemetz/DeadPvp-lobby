@@ -1,8 +1,9 @@
 package net.DeadPvp;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 import net.DeadPvp.commands.*;
 import net.DeadPvp.commands.World;
-import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.*;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -11,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
@@ -21,7 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Main extends JavaPlugin implements Listener {
+public class Main extends JavaPlugin implements Listener, PluginMessageListener {
 
 
     public ArrayList<Player> vanishedPlayers = new ArrayList<Player>();
@@ -39,6 +41,8 @@ public class Main extends JavaPlugin implements Listener {
     public boolean stopLag = false;
     public Entity robert;
     public Location robertLoc;
+    public int playerCount = 0;
+    public boolean titlechanged = false;
 
     private static Main instance;
 
@@ -47,29 +51,29 @@ public class Main extends JavaPlugin implements Listener {
     public String host, database, username, password;
     public int port;
 
-    public void mysqlSetup(){
+    public void mysqlSetup() {
         host = "localhost";
         port = 3306;
         database = "minecraft";
         username = "root";
         password = "";
 
-        try{
+        try {
 
-            synchronized (this){
-                if(getConnection() != null && !getConnection().isClosed()){
+            synchronized (this) {
+                if (getConnection() != null && !getConnection().isClosed()) {
                     return;
                 }
 
                 Class.forName("com.mysql.jdbc.Driver");
-                setConnection( DriverManager.getConnection("jdbc:mysql://" + this.host + ":"
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + this.host + ":"
                         + this.port + "/" + this.database, this.username, this.password));
 
                 Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL CONNECTED");
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }catch(ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -84,33 +88,20 @@ public class Main extends JavaPlugin implements Listener {
 
     public void onEnable() {
 
-
-        new Permission("b.admin");
         mysqlSetup();
 //        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
 //            Recipe recipe = it.next();
 //            if (recipe != null) it.remove();
 //        }
+        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", this);
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         saveDefaultConfig();
         instance = this;
         registerEvents();
         registerCmd();
         restartServ();
-        getServer ().getMessenger ().registerOutgoingPluginChannel (this, "BungeeCord");
+        TabList.Tab();
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (robert != null)
-                {
-                    if (robertLoc != null)
-                        robert.teleport(robertLoc);
-                }
-            }
-        }.runTaskTimer(this, 1,1);
-        //Update ScoreBoard on lobby
-        new TimerTaskUpdate().runTaskTimer(Main.getInstance(), 1, 100);
         super.onEnable();
     }
 
@@ -164,7 +155,7 @@ public class Main extends JavaPlugin implements Listener {
                                     Bukkit.getConsoleSender().sendMessage("Le serveur redemarre !");
                                     Bukkit.getServer().dispatchCommand(getServer().getConsoleSender(), "stop");
                                 }
-                            }.runTaskLater(Main.getInstance(), 20*5L);
+                            }.runTaskLater(Main.getInstance(), 20 * 5L);
                         }
                     }.runTaskLater(Main.getInstance(), 500L);
                 }
@@ -173,8 +164,8 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public void onDisable() {
-        for (Player player:Bukkit.getOnlinePlayers()) {
-            if (staffModePlayers.contains(player)){
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (staffModePlayers.contains(player)) {
                 AdminInv ai = AdminInv.getFromPlayer(player);
                 ai.destroy();
                 staffModePlayers.remove(player);
@@ -187,6 +178,19 @@ public class Main extends JavaPlugin implements Listener {
     }
 
 
+    @Override
+    public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+        if (!s.equals("BungeeCord")) {
+            return;
+        }
+        ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
+        String subchannel = in.readUTF();
+        if (subchannel.equals("PlayerCount")) {
+            String server = in.readUTF();
+            playerCount = in.readInt();
+            return;
+        }
 
 
+    }
 }
