@@ -6,7 +6,7 @@ main: net.DeadPvp.Main
 description: DPCore is a utility plugin for DeadPVP
 commands:
   freeze:
-  vanich:
+  vanish:
   sm:
     aliases: [staffmode, ba]
   hub:

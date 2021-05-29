@@ -52,7 +52,7 @@ public class EventListeners implements Listener {
         UtilityFunctions.initLobby(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
         if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
-            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] §6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
+            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
     }
@@ -113,7 +113,7 @@ public class EventListeners implements Listener {
         if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
         {
             UtilityFunctions.tpToServ(p, "pvpsoup");
-
+            System.out.println(p.getName()+" est partie sur le pvpsoup.");
             p.setVelocity(new Vector(0,2,-5));
         }
     }
@@ -123,18 +123,27 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onClickInv (InventoryClickEvent e) {
+        e.setCancelled(true);
+        if (e.getCurrentItem() == null ){
+            return;
+        }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§c§lPVP§9§lSOUP")
         {
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
         }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lCREATIF")
         {
-                    UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+            Player player = (Player) e.getWhoClicked();
+            if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")){
+                UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+            }else{
+                player.sendMessage("§cLe serveur est en maintenance !");
+            }
+
         }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lSite de DeadPVP"){
             e.getWhoClicked().sendMessage("§2§ldeadpvp.fr");
             e.getWhoClicked().closeInventory();
-
         }
     }
 
@@ -155,15 +164,12 @@ public class EventListeners implements Listener {
             String msg = e.getMessage();
             String newMsg = getPrefix(p) + e.getPlayer().getDisplayName() + " §f: ";
             e.setCancelled(true);
-            if (msg.equals("[event cancelled by LiteBans")) return;
-            if ((p.hasPermission("dp.modo.chat") || p.hasPermission("dp.modo.*") || p.hasPermission("dp.*") ||
-                    p.hasPermission("dp.admin.chat") || p.hasPermission("dp.admin.*")) && e.getMessage().startsWith("!")) {
-
-                if (msg.startsWith("!!") && (p.hasPermission("dp.admin.chat") || p.hasPermission("dp.admin.*")
-                        || p.hasPermission("dp.*"))) {
+            if (msg.equals("[event cancelled by LiteBans]")) return;
+            if ((p.hasPermission("chat.admin") || p.hasPermission("chat.dev") || p.hasPermission("chat.modo")) && e.getMessage().startsWith("!")) {
+                if (msg.startsWith("!!") && (p.hasPermission("chat.admin") || p.hasPermission("dp.admin.*") || p.hasPermission("dp.*"))) {
                     msg = msg.substring(2);
                     for (ProxiedPlayer reciever : BungeeCord.getInstance().getPlayers()) {
-                        if (reciever.hasPermission("dp.admin.chat") || reciever.hasPermission("dp.admin.*") ||
+                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("dp.admin.*") ||
                                 reciever.hasPermission("dp.*")) {
                             String msgAdminStr = "§d[AdminChat] " + newMsg + msg;
                             BaseComponent msgAdminBC = null;
@@ -177,9 +183,7 @@ public class EventListeners implements Listener {
                     e.setCancelled(true);
                     msg = msg.substring(1);
                     for (Player reciever : Bukkit.getOnlinePlayers()) {
-                        if (reciever.hasPermission("dp.modo.chat") || reciever.hasPermission("dp.modo.*") ||
-                                reciever.hasPermission("dp.*") || reciever.hasPermission("dp.admin.chat") ||
-                                reciever.hasPermission("dp.admin.*")) {
+                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("chat.dev") || reciever.hasPermission("chat.modo")) {
                             reciever.sendRawMessage("§d[StaffChat] " + newMsg + msg);
                         }
                     }
@@ -300,8 +304,8 @@ public class EventListeners implements Listener {
 
     public static String getPrefix(Player p) {
         if (p.hasPermission("chat.admin")) return "§c[Administrateur] §6";
-        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
         if (p.hasPermission("chat.dev")) return "§d[Développeur] §6";
+        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
         if (p.hasPermission("chat.builder")) return "§a[Builder] §6";
         if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §6";
         if (p.hasPermission("chat.vip")) return "§b[VIP] §6";
