@@ -2,6 +2,7 @@ package net.DeadPvp;
 
 import net.DeadPvp.commands.*;
 import net.DeadPvp.commands.World;
+import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.*;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -82,6 +83,8 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     public void onEnable() {
+
+
         new Permission("b.admin");
         mysqlSetup();
 //        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
@@ -94,7 +97,7 @@ public class Main extends JavaPlugin implements Listener {
         registerEvents();
         registerCmd();
         restartServ();
-        getServer ().getMessenger ().registerOutgoingPluginChannel (this, "BungeeCord"); // ECRIT EXACTEMENT EXACTEMENT SA A LA MAJ PRET SINN SA MARCHE PAS
+        getServer ().getMessenger ().registerOutgoingPluginChannel (this, "BungeeCord");
 
         new BukkitRunnable() {
             @Override
@@ -106,7 +109,8 @@ public class Main extends JavaPlugin implements Listener {
                 }
             }
         }.runTaskTimer(this, 1,1);
-
+        //Update ScoreBoard on lobby
+        new TimerTaskUpdate().runTaskTimer(Main.getInstance(), 1, 100);
         super.onEnable();
     }
 

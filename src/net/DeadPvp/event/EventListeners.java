@@ -1,6 +1,7 @@
 package net.DeadPvp.event;
 
 import net.DeadPvp.Main;
+import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.AdminInv;
 import net.DeadPvp.utils.ItemBuilder;
 import net.DeadPvp.utils.UtilityFunctions;
@@ -29,11 +30,17 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
+import org.bukkit.util.Vector;
+
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class EventListeners implements Listener {
 
     Main main;
+
 
 
     @EventHandler
@@ -49,11 +56,13 @@ public class EventListeners implements Listener {
         e.getPlayer().teleport(spawn);
         e.getPlayer().getInventory().clear();
         UtilityFunctions.initLobby(e.getPlayer());
+        setScoreboard(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
         if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
-            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] §6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
+            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
+
     }
 
     @EventHandler
@@ -109,12 +118,12 @@ public class EventListeners implements Listener {
                 e.setTo(e.getFrom());
             }
         }
-        if (Main.getInstance().isWaiting.contains(p)) return;
         if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
         {
             UtilityFunctions.tpToServ(p, "pvpsoup");
+            System.out.println(p.getName()+" est partie sur le pvpsoup.");
+            p.setVelocity(new Vector(0,2,-5));
         }
-        StaffModeEventListener.pause(p,1);
     }
 
     @EventHandler
@@ -122,26 +131,27 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void onClickInv (InventoryClickEvent e) {
-        e.setCancelled(!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
+        e.setCancelled(true);
+        if (e.getCurrentItem() == null ){
+            return;
+        }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§c§lPVP§9§lSOUP")
         {
-                    try {
-                        UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
-                    }
-                    catch (Exception ee)
-                    {
-                        e.getWhoClicked().sendMessage("Il y a eu une erreur, contact un administrateur");
-                    }
+                    UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
         }
         if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lCREATIF")
         {
-            try {
-                    UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+            Player player = (Player) e.getWhoClicked();
+            if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")){
+                UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
+            }else{
+                player.sendMessage("§cLe serveur est en maintenance !");
+            }
+
         }
-                    catch (Exception ee)
-        {
-            e.getWhoClicked().sendMessage("Il y a eu une erreur, contact un administrateur");
-        }
+        if (e.getCurrentItem().getType() != null && e.getCurrentItem().getItemMeta().getDisplayName() == "§d§lSite de DeadPVP"){
+            e.getWhoClicked().sendMessage("§2§ldeadpvp.fr");
+            e.getWhoClicked().closeInventory();
         }
     }
 
@@ -162,15 +172,12 @@ public class EventListeners implements Listener {
             String msg = e.getMessage();
             String newMsg = getPrefix(p) + e.getPlayer().getDisplayName() + " §f: ";
             e.setCancelled(true);
-            if (msg.equals("[event cancelled by LiteBans")) return;
-            if ((p.hasPermission("dp.modo.chat") || p.hasPermission("dp.modo.*") || p.hasPermission("dp.*") ||
-                    p.hasPermission("dp.admin.chat") || p.hasPermission("dp.admin.*")) && e.getMessage().startsWith("!")) {
-
-                if (msg.startsWith("!!") && (p.hasPermission("dp.admin.chat") || p.hasPermission("dp.admin.*")
-                        || p.hasPermission("dp.*"))) {
+            if (msg.equals("[event cancelled by LiteBans]")) return;
+            if ((p.hasPermission("chat.admin") || p.hasPermission("chat.dev") || p.hasPermission("chat.modo")) && e.getMessage().startsWith("!")) {
+                if (msg.startsWith("!!") && (p.hasPermission("chat.admin") || p.hasPermission("dp.admin.*") || p.hasPermission("dp.*"))) {
                     msg = msg.substring(2);
                     for (ProxiedPlayer reciever : BungeeCord.getInstance().getPlayers()) {
-                        if (reciever.hasPermission("dp.admin.chat") || reciever.hasPermission("dp.admin.*") ||
+                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("dp.admin.*") ||
                                 reciever.hasPermission("dp.*")) {
                             String msgAdminStr = "§d[AdminChat] " + newMsg + msg;
                             BaseComponent msgAdminBC = null;
@@ -184,9 +191,7 @@ public class EventListeners implements Listener {
                     e.setCancelled(true);
                     msg = msg.substring(1);
                     for (Player reciever : Bukkit.getOnlinePlayers()) {
-                        if (reciever.hasPermission("dp.modo.chat") || reciever.hasPermission("dp.modo.*") ||
-                                reciever.hasPermission("dp.*") || reciever.hasPermission("dp.admin.chat") ||
-                                reciever.hasPermission("dp.admin.*")) {
+                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("chat.dev") || reciever.hasPermission("chat.modo")) {
                             reciever.sendRawMessage("§d[StaffChat] " + newMsg + msg);
                         }
                     }
@@ -307,8 +312,8 @@ public class EventListeners implements Listener {
 
     public static String getPrefix(Player p) {
         if (p.hasPermission("chat.admin")) return "§c[Administrateur] §6";
-        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
         if (p.hasPermission("chat.dev")) return "§d[Développeur] §6";
+        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
         if (p.hasPermission("chat.builder")) return "§a[Builder] §6";
         if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §6";
         if (p.hasPermission("chat.vip")) return "§b[VIP] §6";
@@ -340,5 +345,83 @@ public class EventListeners implements Listener {
 
 
         }
+    }
+    public static void updateScoreboard(Player player){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.getObjective("DPScoreboard");
+
+
+
+        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
+        Date date = new Date();
+        int x = 22-date.getHours();
+        int y = 60-date.getMinutes();
+        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        String y2;
+        if (y < 10){
+            int temp = y;
+            y2 = "0"+y;
+        }else{
+            y2 = ""+y;
+        }
+        objective.setDisplayName("§cOKK");
+        Score score7 = objective.getScore("§b§l   dans "+x+"h"+y2);
+
+        score7.setScore(7);
+        player.setScoreboard(board);
+
+
+    }
+    public void setScoreboard(Player p){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        objective.setDisplayName("§c§lDEAD§1§lPVP");
+        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
+        Date date = new Date();
+        int x = 22-date.getHours();
+        int y = 60-date.getMinutes();
+        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        String y2;
+        if (y < 10){
+            int temp = y;
+            y2 = "0"+y;
+        }else{
+            y2 = ""+y;
+        }
+        Score score14 = objective.getScore("§b§l---------------§r");
+        Score score13 = objective.getScore("§5§l§r ");
+        Score score12 = objective.getScore("§6>>> Connectés :");
+        Score score11 = objective.getScore("    §c"+nbrjoueur+"§6 joueurs");
+        Score score10 = objective.getScore("§4§l ");
+        Score score9 = objective.getScore("§6>>> §6Phase Beta :");
+        Score score8 = objective.getScore("§b§l   Fin de la beta");
+        Score score7 = objective.getScore("§b§l   dans "+x+"h"+y2);
+        Score score6 = objective.getScore("§7§l§r ");
+        Score score5 = objective.getScore("§6>>> DP :");
+        Score score4 = objective.getScore("    §cA venir ...");
+        Score score3 = objective.getScore("§f§l");;
+        Score score2 = objective.getScore("§b§l---------------");
+        Score score1 = objective.getScore("§c§l§r ");
+        Score score0 = objective.getScore("§cmc.deadpvp.fr");
+
+        score14.setScore(14);
+        score13.setScore(13);
+        score12.setScore(12);
+        score11.setScore(11);
+        score10.setScore(10);
+        score9.setScore(9);
+        score8.setScore(8);
+        score7.setScore(7);
+        score6.setScore(6);
+        score5.setScore(5);
+        score4.setScore(4);
+        score3.setScore(3);
+        score2.setScore(2);
+        score1.setScore(1);
+        score0.setScore(0);
+        p.setScoreboard(board);
     }
 }
