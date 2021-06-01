@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import net.DeadPvp.commands.*;
 import net.DeadPvp.commands.World;
+import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.*;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 public class Main extends JavaPlugin implements Listener, PluginMessageListener {
 
@@ -88,6 +90,7 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
 
     public void onEnable() {
 
+        new TimerTaskUpdate().runTaskTimer(this, 1L, 1200L);
         mysqlSetup();
 //        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
 //            Recipe recipe = it.next();

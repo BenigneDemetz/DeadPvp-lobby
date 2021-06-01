@@ -11,9 +11,9 @@ public class Builder implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            if (sender.hasPermission("deaedpvp.builder") ||sender.hasPermission("deadpvp.*"))
+            if (sender.hasPermission("deadpvp.builder") ||sender.hasPermission("deadpvp.*"))
             UtilityFunctions.tpToServ((Player) sender, "builder");
-        } else sender.sendMessage("Tu dois etre joueur");
+        } else sender.sendMessage("Tu dois etre un joueur");
 
 
         return false;
