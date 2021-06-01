@@ -9,6 +9,7 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.minecraft.server.v1_8_R1.ScoreboardScore;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
@@ -378,7 +379,7 @@ public class EventListeners implements Listener {
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("§c§lDEAD§1§lPVP");
+        objective.setDisplayName("§4§lDEAD§1§lPVP");
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
         int x = 22-date.getHours();

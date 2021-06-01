@@ -7,6 +7,7 @@ import net.DeadPvp.Main;
 import net.minecraft.server.v1_8_R1.ChatComponentText;
 import net.minecraft.server.v1_8_R1.PacketPlayOutPlayerListHeaderFooter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -36,24 +37,19 @@ public class TabList {
                         Object craftPlayer = player;
                         ping = (int) craftPlayer.getClass().getField("ping").get(craftPlayer);
                     } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-
+                        System.out.println("error ping");
                     }
 
-                    Object header1 = new ChatComponentText("§bDeadPvp §7- §dLobby\n" +
-                            "ping : " + ping);
-                    Object header2 = new ChatComponentText("§aDeadPvp §7- §dLobby\n" +
-                            "ping : " + ping);
+                    Object header1 = new ChatComponentText(
+                            "§4§lDead§1§lPvp §r§7- §d§lLobby\n" +
+                            "§r§7Ping : §e§l" + ping + "\n");
+                    
+                    Object footer = new ChatComponentText(""+ChatColor.YELLOW + ChatColor.BOLD+"\n"+
+                            "§bJoueurs connectés: "+ Main.getInstance().playerCount +
+                            "\n§6§lmc.deadpvp.fr\n" );
 
+                    a.set(packet, header1);
 
-                    Object footer = new ChatComponentText("§bJoueurs connectés: §e§l" + Main.getInstance().playerCount);
-                    if (Main.getInstance().titlechanged) {
-                        a.set(packet, header2);
-                        Main.getInstance().titlechanged = false;
-
-                    } else {
-                        a.set(packet, header1);
-                        Main.getInstance().titlechanged = true;
-                    }
                     b.set(packet, footer);
 
                     ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
