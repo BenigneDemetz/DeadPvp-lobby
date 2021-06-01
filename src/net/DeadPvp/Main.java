@@ -42,6 +42,7 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
     public Entity robert;
     public Location robertLoc;
     public int playerCount = 0;
+    public boolean titlechanged = false;
 
     private static Main instance;
 

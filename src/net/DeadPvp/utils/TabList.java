@@ -43,7 +43,7 @@ public class TabList {
                     Object header1 = new ChatComponentText(
                             "§4§lDead§1§lPvp §r§7- §d§lLobby\n" +
                             "§r§7Ping : §e§l" + ping + "\n");
-                    
+
                     Object footer = new ChatComponentText(""+ChatColor.YELLOW + ChatColor.BOLD+"\n"+
                             "§bJoueurs connectés: "+ Main.getInstance().playerCount +
                             "\n§6§lmc.deadpvp.fr\n" );
