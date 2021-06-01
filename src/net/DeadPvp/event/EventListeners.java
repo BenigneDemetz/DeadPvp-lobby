@@ -33,6 +33,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
+import us.myles.ViaVersion.ViaVersionPlugin;
+import us.myles.ViaVersion.api.command.ViaVersionCommand;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -43,9 +45,9 @@ public class EventListeners implements Listener {
     Main main;
 
 
-
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        e.getPlayer().setPlayerListName(getPrefix(e.getPlayer())+e.getPlayer().getName());
         e.getPlayer().setGameMode(GameMode.SURVIVAL);
         e.setJoinMessage("");
         Location spawn = e.getPlayer().getLocation();
@@ -59,8 +61,8 @@ public class EventListeners implements Listener {
         UtilityFunctions.initLobby(e.getPlayer());
         setScoreboard(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
-        if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
-            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
+        if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") || e.getPlayer().hasPermission("chat.dev") ){
+            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+e.getPlayer().getName()+" §6vient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
 
@@ -143,6 +145,7 @@ public class EventListeners implements Listener {
                 case GRASS:
                     Player player = (Player) e.getWhoClicked();
                     if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")){
+
                         UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
                         return;
                     }else{
@@ -323,12 +326,12 @@ public class EventListeners implements Listener {
     }
 
     public static String getPrefix(Player p) {
-        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §6";
-        if (p.hasPermission("chat.dev")) return "§d[Développeur] §6";
-        if (p.hasPermission("chat.modo")) return "§e[Modérateur] §6";
-        if (p.hasPermission("chat.builder")) return "§a[Builder] §6";
-        if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §6";
-        if (p.hasPermission("chat.vip")) return "§b[VIP] §6";
+        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §c";
+        if (p.hasPermission("chat.dev")) return "§5[Développeur] §5";
+        if (p.hasPermission("chat.modo")) return "§6[Modérateur] §6";
+        if (p.hasPermission("chat.builder")) return "§9[Builder] §9";
+        if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §4";
+        if (p.hasPermission("chat.vip")) return "§b[VIP] §b";
         else return "§7";
     }
 
@@ -363,7 +366,7 @@ public class EventListeners implements Listener {
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("§c§lDEAD§1§lPVP");
+        objective.setDisplayName("§4§lDEAD§1§lPVP");
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
         int x = (22-date.getHours())-1;

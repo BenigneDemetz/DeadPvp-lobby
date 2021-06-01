@@ -34,11 +34,6 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
     public ArrayList<Player> freezedPlayers = new ArrayList<Player>();
     public ArrayList<Player> onlinePlayers = new ArrayList<Player>();
     public ArrayList<Player> isWaiting = new ArrayList<>();
-    public ArrayList<Player> didCommandJoin = new ArrayList<>();
-    public ArrayList<Player> isPlaying = new ArrayList<>();
-    public HashMap<Player, String> hasKit = new HashMap<>();
-    public ArrayList<Player> didCommandJoinforJump = new ArrayList<>();
-    public ArrayList<Player> hasJump = new ArrayList<>();
     public ArrayList<Player> specItemMode = new ArrayList<>();
     public boolean stopLag = false;
     public Entity robert;
