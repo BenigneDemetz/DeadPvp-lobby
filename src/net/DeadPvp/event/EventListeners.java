@@ -4,6 +4,7 @@ import net.DeadPvp.Main;
 import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.AdminInv;
 import net.DeadPvp.utils.ItemBuilder;
+import net.DeadPvp.utils.MysqlUtility;
 import net.DeadPvp.utils.UtilityFunctions;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatMessageType;
@@ -62,7 +63,12 @@ public class EventListeners implements Listener {
             Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
-
+        try {
+            MysqlUtility.createPlayer(e.getPlayer());
+        }
+        catch (Exception ee){
+            System.out.println(ee);
+        }
     }
 
     @EventHandler
@@ -365,12 +371,14 @@ public class EventListeners implements Listener {
         }else{
             y2 = ""+y;
         }
-        objective.setDisplayName("§cOKK");
-        Score score7 = objective.getScore("§b§l   dans "+x+"h"+y2);
+        try {
+            objective.setDisplayName("§cOKK");
+            Score score7 = objective.getScore("§b§l   dans " + x + "h" + y2);
 
-        score7.setScore(7);
-        player.setScoreboard(board);
-
+            score7.setScore(7);
+            player.setScoreboard(board);
+        }
+        catch (Exception ignored){}
 
     }
     public void setScoreboard(Player p){

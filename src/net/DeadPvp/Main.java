@@ -43,9 +43,10 @@ public class Main extends JavaPlugin implements Listener {
     private static Main instance;
 
 
-    private Connection connection;
-    public String host, database, username, password;
+    private static Connection connection;
+    public String host, database, username, password, viptable;
     public int port;
+
 
     public void mysqlSetup(){
         host = "localhost";
@@ -53,6 +54,7 @@ public class Main extends JavaPlugin implements Listener {
         database = "minecraft";
         username = "root";
         password = "";
+        viptable = "vipgrade";
 
         try{
 
@@ -74,7 +76,7 @@ public class Main extends JavaPlugin implements Listener {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return connection;
     }
 
