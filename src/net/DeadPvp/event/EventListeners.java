@@ -2,15 +2,15 @@ package net.DeadPvp.event;
 
 import net.DeadPvp.Main;
 import net.DeadPvp.timerstask.TimerTaskUpdate;
-import net.DeadPvp.utils.AdminInv;
-import net.DeadPvp.utils.ItemBuilder;
-import net.DeadPvp.utils.MysqlUtility;
-import net.DeadPvp.utils.UtilityFunctions;
+import net.DeadPvp.utils.*;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -34,6 +34,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -60,16 +65,14 @@ public class EventListeners implements Listener {
         setScoreboard(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
         if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") ){
-            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+" §cvient de rejoindre le lobby !");
+            Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+"§6"+e.getPlayer().getName()+
+                    " §cvient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
-        try {
-            MysqlUtility.createPlayer(e.getPlayer());
-        }
-        catch (Exception ee){
-            System.out.println(ee);
-        }
+        Grades.updateGrade(e.getPlayer(), "swag", 30);
     }
+
+
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {

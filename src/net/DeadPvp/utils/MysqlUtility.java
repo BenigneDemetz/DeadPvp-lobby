@@ -1,5 +1,6 @@
 package net.DeadPvp.utils;
 
+import com.mysql.jdbc.DatabaseMetaData;
 import net.DeadPvp.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.sql.*;
 
 public class MysqlUtility {
 
@@ -37,6 +39,27 @@ public class MysqlUtility {
     public static void createPlayer(final Player player) {
         try {
             String name = player.getName();
+            Connection con = null;
+            try {
+                Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+                con = DriverManager.getConnection("jdbc:odbc:HY_FLAT");
+
+                DatabaseMetaData meta = (DatabaseMetaData) con.getMetaData();
+                ResultSet res = meta.getTables(null, null, null,
+                        new String[] {"TABLE"});
+                System.out.println("List of tables: ");
+                while (res.next()) {
+                    System.out.println(
+                            "   "+res.getString("TABLE_CAT")
+                                    + ", "+res.getString("TABLE_SCHEM")
+                                    + ", "+res.getString("TABLE_NAME")
+                                    + ", "+res.getString("TABLE_TYPE")
+                                    + ", "+res.getString("REMARKS"));
+                }
+                res.close();
+
+                con.close();
+
             PreparedStatement statement = plugin.getConnection()
                     .prepareStatement("SELECT * FROM " + plugin.viptable + " WHERE PSEUDO=?");
             statement.setString(1, name);
@@ -54,6 +77,9 @@ public class MysqlUtility {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        } catch (Exception e) {
+            System.err.println("Exception: "+e.getMessage());
         }
     }
 

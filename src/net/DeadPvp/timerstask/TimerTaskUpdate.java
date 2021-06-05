@@ -9,7 +9,7 @@ public class TimerTaskUpdate extends BukkitRunnable {
     @Override
     public void run() {
         for(Player player : Bukkit.getOnlinePlayers()){
-            Bukkit.broadcastMessage("UPDATED");
+            //Bukkit.broadcastMessage("UPDATED");
             EventListeners.updateScoreboard(player);
         }
 
