@@ -23,39 +23,47 @@ public class TabList {
             @Override
             public void run() {
                 int ping = 0;
+                String ping2;
 
                 try {
 
-                    if (Bukkit.getOnlinePlayers().size() == 0) return;
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                    Field a = packet.getClass().getDeclaredField("a");
-                    a.setAccessible(true);
-                    Field b = packet.getClass().getDeclaredField("b");
-                    b.setAccessible(true);
+                    if (Bukkit.getOnlinePlayers().size() != 0){
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            Field a = packet.getClass().getDeclaredField("a");
+                            a.setAccessible(true);
+                            Field b = packet.getClass().getDeclaredField("b");
+                            b.setAccessible(true);
 
-                    try {
-                        Object craftPlayer = player;
-                        ping = (int) craftPlayer.getClass().getField("ping").get(craftPlayer);
-                    } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-                        System.out.println("error ping");
+                            try {
+                                Object craftPlayer = player;
+                                ping = (int) craftPlayer.getClass().getField("ping").get(craftPlayer);
+                            } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+                                System.out.println("error ping");
+                            }
+                            if (ping == 0){
+                                ping2 = "§c§lunknown";
+                            }else{
+                                ping2 = ping+"";
+                            }
+                            Object header1 = new ChatComponentText(
+                                    "§4§lDead§1§lPvp §r§7- §d§lLobby\n" +
+                                            "§r§7Ping : §e§l" + ping2 + "\n");
+
+                            Object footer = new ChatComponentText(""+ChatColor.YELLOW + ChatColor.BOLD+"\n"+
+                                    "§bJoueurs connectés: "+ Main.getInstance().playerCount +
+                                    "\n§6§lmc.deadpvp.fr\n" );
+
+                            a.set(packet, header1);
+
+                            b.set(packet, footer);
+
+                            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+                        }
                     }
 
-                    Object header1 = new ChatComponentText(
-                            "§4§lDead§1§lPvp §r§7- §d§lLobby\n" +
-                            "§r§7Ping : §e§l" + ping + "\n");
-
-                    Object footer = new ChatComponentText(""+ChatColor.YELLOW + ChatColor.BOLD+"\n"+
-                            "§bJoueurs connectés: "+ Main.getInstance().playerCount +
-                            "\n§6§lmc.deadpvp.fr\n" );
-
-                    a.set(packet, header1);
-
-                    b.set(packet, footer);
-
-                    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-                    }
 
                 } catch (NoSuchFieldException | IllegalAccessException e) {
+                    System.out.println("ERREUR TAB");
                     e.printStackTrace();
                 }
             }
@@ -67,6 +75,10 @@ public class TabList {
                 ByteArrayDataOutput doss = ByteStreams.newDataOutput();
                 doss.writeUTF("PlayerCount");
                 doss.writeUTF("ALL"); // Le nom du srv
+                if(Bukkit.getOnlinePlayers().size() ==0){
+                    cancel();
+                    return;
+                }
                 Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
                 player.sendPluginMessage(Main.getInstance(), "BungeeCord", doss.toByteArray());
             }

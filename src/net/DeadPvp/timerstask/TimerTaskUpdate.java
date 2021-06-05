@@ -8,8 +8,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class TimerTaskUpdate extends BukkitRunnable {
     @Override
     public void run() {
+        if (Bukkit.getOnlinePlayers().size() == 0){
+            return;
+        }
         for(Player player : Bukkit.getOnlinePlayers()){
-            EventListeners.updateScoreboard(player);
+            EventListeners.updateScoreBoard(player);
         }
 
     }

@@ -59,9 +59,9 @@ public class EventListeners implements Listener {
         e.getPlayer().teleport(spawn);
         e.getPlayer().getInventory().clear();
         UtilityFunctions.initLobby(e.getPlayer());
-        setScoreboard(e.getPlayer());
+        setScoreBoard(e.getPlayer());
         e.getPlayer().setWalkSpeed((float) 0.4);
-        if (e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") || e.getPlayer().hasPermission("chat.dev") ){
+        if (e.getPlayer().hasPermission("chat.builder") ||e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.admin") || e.getPlayer().hasPermission("chat.dev") ){
             Bukkit.broadcastMessage("§7[§4§lD§9§lP§7] "+getPrefix(e.getPlayer())+e.getPlayer().getName()+" §6vient de rejoindre le lobby !");
             e.getPlayer().getWorld().strikeLightningEffect(e.getPlayer().getLocation());
         }
@@ -361,17 +361,11 @@ public class EventListeners implements Listener {
 
         }
     }
-    public static void updateScoreboard(Player player){
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard board = manager.getNewScoreboard();
-        Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("§4§lDEAD§1§lPVP");
+    public static void setScoreBoard(Player player) {
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
         int x = (22-date.getHours())-1;
-        int y = 60-date.getMinutes();
-        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        int y = 59-date.getMinutes();
         String y2;
         if (y < 10){
             int temp = y;
@@ -379,61 +373,70 @@ public class EventListeners implements Listener {
         }else{
             y2 = ""+y;
         }
-        Score score14 = objective.getScore("§b§l---------------§r");
-        Score score13 = objective.getScore("§5§l§r ");
-        Score score12 = objective.getScore("§6>>> Connectés :");
-        Score score11 = objective.getScore("    §c"+nbrjoueur+"§6 joueurs");
-        Score score10 = objective.getScore("§4§l ");
-        Score score9 = objective.getScore("§6>>> §6Phase Beta :");
-        Score score8;
-        Score score7;
-        if (date.getHours() <=15){
-            int xv2 = (16-date.getHours())-1;
-            int yv2 = 60 - date.getMinutes();
-            score8 = objective.getScore("§b§l   Ouverture de la beta");
-            score7 = objective.getScore("§b§l   dans "+xv2+"h"+yv2);
-        }else {
-            score8 = objective.getScore("§b§l   Fin de la beta");
-            score7 = objective.getScore("§b§l   dans " + x + "h" + y2);
-        }
-        Score score6 = objective.getScore("§7§l§r ");
-        Score score5 = objective.getScore("§6>>> DP :");
-        Score score4 = objective.getScore("    §cA venir ...");
-        Score score3 = objective.getScore("§f§l");;
-        Score score2 = objective.getScore("§b§l---------------");
-        Score score1 = objective.getScore("§c§l§r ");
-        Score score0 = objective.getScore("§cmc.deadpvp.fr");
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective obj = board.registerNewObjective("§4§lDEAD§1§lPVP", "dummy");
+        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Score score14 = obj.getScore("§b§l---------------§r");
+        Score score13 = obj.getScore("§5§l§r ");
+        Score score12 = obj.getScore("§6>>> Connectés :");
+        //                              "x joueurs"
+        Score score10 = obj.getScore("§4§l ");
+        Score score9 = obj.getScore("§6>>> §6Phase Beta :");
+        //                              "Fin dans "
+        Score score7 = obj.getScore("§5§l§r§c§l ");
+        Score score6 = obj.getScore("§6>>> §6Votre grade :");
+        Score score5 = obj.getScore("§cA venir");
+        Score score4 = obj.getScore("§5§l§c§r ");
+        Score score3 = obj.getScore("§dEn cas de bug faites");
+        Score score2 = obj.getScore("§d/bug <votre bug> !");
+        Score score1 = obj.getScore("§c§b§l---------------§r");
+        Score score0 = obj.getScore("§cmc.deadpvp.fr");
 
+        score0.setScore(0);
+        score1.setScore(1);
+        score2.setScore(2);
+        score3.setScore(3);
+        score4.setScore(4);
+        score5.setScore(5);
+        score6.setScore(6);
+        score7.setScore(7);
+        score10.setScore(10);
+        score9.setScore(9);
         score14.setScore(14);
         score13.setScore(13);
         score12.setScore(12);
-        score11.setScore(11);
-        score10.setScore(10);
-        score9.setScore(9);
-        score8.setScore(8);
-        score7.setScore(7);
-        score6.setScore(6);
-        score5.setScore(5);
-        score4.setScore(4);
-        score3.setScore(3);
-        score2.setScore(2);
-        score1.setScore(1);
-        score0.setScore(0);
+
+
+
+        Team onlineCounter = board.registerNewTeam("onlineCounter");
+        onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
+        onlineCounter.setPrefix("§c"+Main.getInstance().playerCount+" §6joueurs");
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(11);
+
+
+
+        Team beta1;
+        Team beta2;
+
+        beta2 = board.registerNewTeam("beta2");
+        beta2.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
+        beta2.setPrefix("§cFin dans "+x+"h"+y2);
+        obj.getScore(ChatColor.BLACK + "" + ChatColor.WHITE).setScore(8);
+
+
+
+
+
+
+
         player.setScoreboard(board);
-
-
     }
-    public void setScoreboard(Player p){
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
-        Scoreboard board = manager.getNewScoreboard();
-        Objective objective = board.registerNewObjective("DPScoreboard", "dummy");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        objective.setDisplayName("§4§lDEAD§1§lPVP");
+
+    public static void updateScoreBoard(Player player) {
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
         int x = (22-date.getHours())-1;
-        int y = 60-date.getMinutes();
-        int nbrjoueur = Bukkit.getOnlinePlayers().size();
+        int y = 59-date.getMinutes();
         String y2;
         if (y < 10){
             int temp = y;
@@ -441,46 +444,13 @@ public class EventListeners implements Listener {
         }else{
             y2 = ""+y;
         }
-        Score score14 = objective.getScore("§b§l---------------§r");
-        Score score13 = objective.getScore("§5§l§r ");
-        Score score12 = objective.getScore("§6>>> Connectés :");
-        Score score11 = objective.getScore("    §c"+nbrjoueur+"§6 joueurs");
-        Score score10 = objective.getScore("§4§l ");
-        Score score9 = objective.getScore("§6>>> §6Phase Beta :");
-        Score score8;
-        Score score7;
-        if (date.getHours() <=15){
-            int xv2 = (16-date.getHours())-1;
-            int yv2 = 60 - date.getMinutes();
-            score8 = objective.getScore("§b§l   Ouverture de la beta");
-            score7 = objective.getScore("§b§l   dans "+xv2+"h"+yv2);
-        }else {
-            score8 = objective.getScore("§b§l   Fin de la beta");
-            score7 = objective.getScore("§b§l   dans " + x + "h" + y2);
-        }
-        Score score6 = objective.getScore("§7§l§r ");
-        Score score5 = objective.getScore("§6>>> DP :");
-        Score score4 = objective.getScore("    §cA venir ...");
-        Score score3 = objective.getScore("§f§l");;
-        Score score2 = objective.getScore("§b§l---------------");
-        Score score1 = objective.getScore("§c§l§r ");
-        Score score0 = objective.getScore("§cmc.deadpvp.fr");
 
-        score14.setScore(14);
-        score13.setScore(13);
-        score12.setScore(12);
-        score11.setScore(11);
-        score10.setScore(10);
-        score9.setScore(9);
-        score8.setScore(8);
-        score7.setScore(7);
-        score6.setScore(6);
-        score5.setScore(5);
-        score4.setScore(4);
-        score3.setScore(3);
-        score2.setScore(2);
-        score1.setScore(1);
-        score0.setScore(0);
-        p.setScoreboard(board);
+        Scoreboard board = player.getScoreboard();
+        board.getTeam("onlineCounter").setPrefix("§c"+Main.getInstance().playerCount+" §6joueurs");
+        board.getTeam("beta2").setPrefix("§cFin dans "+x+"h"+y2);
+
+
+
     }
+
 }

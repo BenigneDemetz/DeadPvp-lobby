@@ -10,7 +10,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -23,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TimerTask;
 
 public class Main extends JavaPlugin implements Listener, PluginMessageListener {
 
@@ -84,8 +82,7 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
     }
 
     public void onEnable() {
-
-        new TimerTaskUpdate().runTaskTimer(this, 1L, 1200L);
+        new TimerTaskUpdate().runTaskTimer(this, 1L, 20L);
         mysqlSetup();
 //        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
 //            Recipe recipe = it.next();
