@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import net.DeadPvp.commands.*;
 import net.DeadPvp.commands.World;
+import net.DeadPvp.event.EventListeners;
 import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.*;
 import org.bukkit.*;
@@ -15,6 +16,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -95,7 +100,6 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
         registerEvents();
         registerCmd();
         restartServ();
-        TabList.Tab();
 
         super.onEnable();
     }
@@ -183,6 +187,28 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
         if (subchannel.equals("PlayerCount")) {
             String server = in.readUTF();
             playerCount = in.readInt();
+            if (playerCount > EventListeners.getmaxco()){
+                try {
+
+                    String content = playerCount+"";
+
+                    File file = new  File("/home/ubuntu/server/lobby_serv/plugins/DEADPVP/maxco.txt");
+
+                    if (!file.exists()) {
+                        file.createNewFile();
+                    }
+
+                    FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write(content);
+                    bw.close();
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
             return;
         }
 

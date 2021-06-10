@@ -1,7 +1,6 @@
 package net.DeadPvp.event;
 
 import net.DeadPvp.Main;
-import net.DeadPvp.timerstask.TimerTaskUpdate;
 import net.DeadPvp.utils.AdminInv;
 import net.DeadPvp.utils.ItemBuilder;
 import net.DeadPvp.utils.UtilityFunctions;
@@ -9,11 +8,9 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.minecraft.server.v1_8_R1.ScoreboardScore;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -33,11 +30,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
-import us.myles.ViaVersion.ViaVersionPlugin;
-import us.myles.ViaVersion.api.command.ViaVersionCommand;
 
-import java.util.Date;
-import java.util.TimeZone;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
 
 
 public class EventListeners implements Listener {
@@ -126,6 +124,9 @@ public class EventListeners implements Listener {
             UtilityFunctions.tpToServ(p, "pvpsoup");
             System.out.println(p.getName()+" est partie sur le pvpsoup.");
             p.setVelocity(new Vector(0,2,-5));
+        }
+        if(p.getLocation().getX()<=-70.701 && Math.abs(p.getLocation().getZ())<=12 && p.getLocation().getX()<=-70.701){
+            p.setVelocity(new Vector(5,2,0));
         }
     }
 
@@ -334,19 +335,32 @@ public class EventListeners implements Listener {
         if (p.hasPermission("chat.vip")) return "§b[VIP] §b";
         else return "§7";
     }
+    public static String getPrefixname(Player p) {
+        if (p.hasPermission("chat.admin")) return "§cAdministrateur";
+        if (p.hasPermission("chat.dev")) return "§5Développeur";
+        if (p.hasPermission("chat.modo")) return "§6Modérateur";
+        if (p.hasPermission("chat.builder")) return "§9Builder";
+        if (p.hasPermission("chat.swag")) return "§nSWAG";
+        if (p.hasPermission("chat.vip")) return "§bVIP";
+        else return "§7Joueur";
+    }
 
 
     public static void compassEvent (Event e, Player player, ItemStack it) {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
             Inventory inv = Bukkit.createInventory(null, 36,"§2§lSelection du mode de jeu");
-            ItemBuilder grass = new ItemBuilder(Material.GRASS).setLore(" ").
-                            setName("§d§lCREATIF §c§l[EN MAINTENANCE]");
+            List<String> lorecrea = Arrays.asList("§bDescription :", "  §7Construisez seul ou entre amis","  §7le plot de vos rêves !","§f ", "§4§lEn maintenance");
+            ItemBuilder grass = new ItemBuilder(Material.GRASS).setLore(lorecrea).setName("§d§lCREATIF §c§l[EN MAINTENANCE]");
             inv.setItem(11, UtilityFunctions.iSDeleteDatas(grass.toItemStack()));
-            ItemBuilder sword = new ItemBuilder(Material.DIAMOND_SWORD).setName("§c§lPVP§9§lSOUP").
-                    addEnchant(Enchantment.ARROW_FIRE, 1).setLore(" ");
+
+            List<String> lorepvp = Arrays.asList("§bDescription :", "  §7Un mode de jeu classique de DEADPVP ! ","  §7Combattez vos ennemis dans une map où les soupes","  §7peuvent vous sauver la vie !");
+            ItemBuilder sword = new ItemBuilder(Material.DIAMOND_SWORD).setName("§c§lPVP§9§lSOUP").addEnchant(Enchantment.ARROW_FIRE, 1).setLore(lorepvp);
             inv.setItem(13, UtilityFunctions.iSDeleteDatas(sword.toItemStack()));
+
+            List<String> loremaintenance = Arrays.asList("§bDescription :", "  §cEn maintenance !", "");
             ItemBuilder barrier = new ItemBuilder(Material.BARRIER).setName("§4Maintenance").setLore(" ");
             inv.setItem(15, UtilityFunctions.iSDeleteDatas(barrier.toItemStack()));
+
             ItemBuilder paper = new ItemBuilder(Material.PAPER).setName("§d§lSite de DeadPVP").setLore(" ");
             inv.setItem(31, UtilityFunctions.iSDeleteDatas(paper.toItemStack()));
 
@@ -381,23 +395,22 @@ public class EventListeners implements Listener {
         Score score12 = obj.getScore("§6>>> Connectés :");
         //                              "x joueurs"
         Score score10 = obj.getScore("§4§l ");
-        Score score9 = obj.getScore("§6>>> §6Phase Beta :");
-        //                              "Fin dans "
+        Score score9 = obj.getScore("§6>>> Connexion simultanée :");
+        //                              "nbr de co "
         Score score7 = obj.getScore("§5§l§r§c§l ");
         Score score6 = obj.getScore("§6>>> §6Votre grade :");
-        Score score5 = obj.getScore("§cA venir");
+        //                             "GRADE "
         Score score4 = obj.getScore("§5§l§c§r ");
         Score score3 = obj.getScore("§dEn cas de bug faites");
         Score score2 = obj.getScore("§d/bug <votre bug> !");
         Score score1 = obj.getScore("§c§b§l---------------§r");
-        Score score0 = obj.getScore("§cmc.deadpvp.fr");
+        Score score0 = obj.getScore("§c§lmc.deadpvp.fr");
 
         score0.setScore(0);
         score1.setScore(1);
         score2.setScore(2);
         score3.setScore(3);
         score4.setScore(4);
-        score5.setScore(5);
         score6.setScore(6);
         score7.setScore(7);
         score10.setScore(10);
@@ -408,19 +421,22 @@ public class EventListeners implements Listener {
 
 
 
+        Team grade = board.registerNewTeam("grade");
+        grade.addEntry(ChatColor.BLACK + "" + ChatColor.MAGIC);
+        grade.setPrefix(getPrefixname(player));
+        obj.getScore(ChatColor.BLACK + "" + ChatColor.MAGIC).setScore(5);
+
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
-        onlineCounter.setPrefix("§c"+Main.getInstance().playerCount+" §6joueurs");
+        onlineCounter.setPrefix("§b"+Main.getInstance().playerCount+" §bjoueurs");
         obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(11);
 
 
 
-        Team beta1;
-        Team beta2;
 
-        beta2 = board.registerNewTeam("beta2");
-        beta2.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
-        beta2.setPrefix("§cFin dans "+x+"h"+y2);
+        Team maxco = board.registerNewTeam("maxco");
+        maxco.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
+        maxco.setPrefix("§bRecord : §b§l0");
         obj.getScore(ChatColor.BLACK + "" + ChatColor.WHITE).setScore(8);
 
 
@@ -444,12 +460,32 @@ public class EventListeners implements Listener {
         }else{
             y2 = ""+y;
         }
-
+        int players = Main.getInstance().playerCount;
         Scoreboard board = player.getScoreboard();
-        board.getTeam("onlineCounter").setPrefix("§c"+Main.getInstance().playerCount+" §6joueurs");
-        board.getTeam("beta2").setPrefix("§cFin dans "+x+"h"+y2);
+        int max = getmaxco();
+        board.getTeam("onlineCounter").setPrefix("§b"+players+" §bjoueurs");
+        board.getTeam("maxco").setPrefix("§bRecord : §b§l"+max);
+        board.getTeam("grade").setPrefix(getPrefixname(player));
 
 
+
+
+    }
+
+    public static int getmaxco(){
+        String temp;
+        int maxco = 0;
+        try {
+            Scanner sc = new Scanner(new File("/home/ubuntu/server/lobby_serv/plugins/DEADPVP/maxco.txt"));
+            String[] tab = sc.nextLine().split(",");
+            temp = tab[0];
+            maxco = Integer.parseInt(temp);
+            sc.close();
+
+        }catch (IOException e){
+            Bukkit.getConsoleSender().sendMessage("§c§lWarning : le fichier maxco.txt n'éxiste plus ! Merci de le créer ici : /home/ubuntu/server/lobby_serv/plugins/DEADPVP/");
+        }
+        return maxco;
 
     }
 
