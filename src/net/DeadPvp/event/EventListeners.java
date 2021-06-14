@@ -7,6 +7,7 @@ import net.DeadPvp.utils.UtilityFunctions;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftItemFrame;
@@ -35,16 +36,22 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.sql.SQLOutput;
 import java.util.*;
 
 
 public class EventListeners implements Listener {
 
     Main main;
+    Map<Player, Long> spam = new HashMap<Player, Long>();
+    Map<Player, String> doublemsg = new HashMap<Player, String>();
+    Map<Player, Boolean> incombat = new HashMap<Player, Boolean>();
+
 
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        doublemsg.put(e.getPlayer(),null);
         e.getPlayer().setPlayerListName(getPrefix(e.getPlayer())+e.getPlayer().getName());
         e.getPlayer().setGameMode(GameMode.SURVIVAL);
         e.setJoinMessage("");
@@ -183,6 +190,30 @@ public class EventListeners implements Listener {
 
     @EventHandler
     public void sendMessage(PlayerChatEvent e) {
+
+        Player player = e.getPlayer();
+        if(spam.containsKey(player)) {
+            if(spam.get(player) > System.currentTimeMillis()) {
+                player.sendMessage("§cErreur : tu dois attendre entre chaque message !");
+                e.setCancelled(true);
+
+
+
+                return;
+            }
+
+        }
+        System.out.println(spam.get(player));
+        Long c = System.currentTimeMillis()+(3*1000);
+        spam.put(player, c);
+
+        if(e.getMessage().equalsIgnoreCase(doublemsg.get(player.getPlayer()))){
+            player.sendMessage("§cErreur : impossible d'envoyer 2 fois le même message d'affilé !");
+            e.setCancelled(true);
+            return;
+        }
+        doublemsg.put(e.getPlayer(),e.getMessage());
+
         try {
             Player p = e.getPlayer();
             String msg = e.getMessage();
@@ -294,6 +325,13 @@ public class EventListeners implements Listener {
     @EventHandler
     public void onCommand (PlayerCommandPreprocessEvent e) {
         String command = e.getMessage();
+        if (command.equalsIgnoreCase("help")) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage("§b§lHELP :" +
+                                         "§6/hub :§f Téléportation au hub " +
+                                         "§6/suggest :§f");
+        }
+
         if((command.equalsIgnoreCase("/pl") || command.equalsIgnoreCase("/plugins")
         || command.equalsIgnoreCase("/list") || command.equalsIgnoreCase("/me") ||
                 command.equalsIgnoreCase("/help")) && !e.getPlayer().hasPermission("deadpvp.unrestrictedchat"))
@@ -428,7 +466,7 @@ public class EventListeners implements Listener {
 
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
-        onlineCounter.setPrefix("§b"+Main.getInstance().playerCount+" §bjoueurs");
+        onlineCounter.setPrefix("§b"+Main.getInstance().playerCount);
         obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(11);
 
 
@@ -463,8 +501,8 @@ public class EventListeners implements Listener {
         int players = Main.getInstance().playerCount;
         Scoreboard board = player.getScoreboard();
         int max = getmaxco();
-        board.getTeam("onlineCounter").setPrefix("§b"+players+" §bjoueurs");
-        board.getTeam("maxco").setPrefix("§bRecord : §b§l"+max);
+        board.getTeam("onlineCounter").setPrefix("§b"+players);
+        board.getTeam("maxco").setPrefix("§b§l"+max);
         board.getTeam("grade").setPrefix(getPrefixname(player));
 
 
@@ -485,6 +523,7 @@ public class EventListeners implements Listener {
         }catch (IOException e){
             Bukkit.getConsoleSender().sendMessage("§c§lWarning : le fichier maxco.txt n'éxiste plus ! Merci de le créer ici : /home/ubuntu/server/lobby_serv/plugins/DEADPVP/");
         }
+
         return maxco;
 
     }

@@ -16,10 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -28,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Main extends JavaPlugin implements Listener, PluginMessageListener {
+public class Main extends JavaPlugin implements Listener,PluginMessageListener {
 
 
     public ArrayList<Player> vanishedPlayers = new ArrayList<Player>();
@@ -87,6 +84,7 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
     }
 
     public void onEnable() {
+        Bukkit.getMessenger().registerIncomingPluginChannel(this, "Return", this);
         new TimerTaskUpdate().runTaskTimer(this, 1L, 20L);
         mysqlSetup();
 //        for (Iterator<Recipe> it = this.getServer().recipeIterator(); it.hasNext(); ) {
@@ -111,7 +109,6 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
 
     private void registerEvents() {
         PluginManager pm = Bukkit.getServer().getPluginManager();
-        pm.registerEvents(this, this);
         pm.registerEvents(new net.DeadPvp.event.EventListeners(), this);
         pm.registerEvents(new net.DeadPvp.event.StaffModeEventListener(), this);
         //pm.registerEvents(new net.DeadPvp.kits.AssassinEvent(), this);
@@ -179,14 +176,27 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
 
     @Override
     public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(bytes));
+
+        try {
+            String sub = in.readUTF(); // Sub-Channel
+            if (sub.equals("command")) { // As in bungee part we gave the sub-channel name "command", here we're checking it sub-channel really is "command", if it is we do the rest of code.
+                String cmd = in.readUTF(); // Command we gave in Bungee part.
+                System.out.println("\n[DPBOUTIQUE] Achat d'un grade !\n");
+                getServer().dispatchCommand(getServer().getConsoleSender(), cmd); // Executing the command!!
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         if (!s.equals("BungeeCord")) {
             return;
         }
-        ByteArrayDataInput in = ByteStreams.newDataInput(bytes);
-        String subchannel = in.readUTF();
+        ByteArrayDataInput ine = ByteStreams.newDataInput(bytes);
+        String subchannel = ine.readUTF();
         if (subchannel.equals("PlayerCount")) {
-            String server = in.readUTF();
-            playerCount = in.readInt();
+            String server = ine.readUTF();
+            playerCount = ine.readInt();
             if (playerCount > EventListeners.getmaxco()){
                 try {
 
@@ -214,4 +224,5 @@ public class Main extends JavaPlugin implements Listener, PluginMessageListener 
 
 
     }
+
 }
