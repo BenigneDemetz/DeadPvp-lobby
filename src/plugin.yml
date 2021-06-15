@@ -1,0 +1,11 @@
+name: DPLobby
+main: net.deadpvp.Main
+version: 1.0
+author: [Benigne, Red_Spash, Arnaud013]
+description: caca
+commands:
+  creatif:
+    description: Aller sur le serveur créatif
+  pvpsoup:
+    description: Aller sur le serveur soup
+
