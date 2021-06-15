@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -97,6 +98,7 @@ public class EventListeners implements Listener {
         }
     }
 
+
     @EventHandler
     public void onKick(PlayerKickEvent e) {
         Player p = e.getPlayer();
@@ -144,7 +146,7 @@ public class EventListeners implements Listener {
     public void onClickInv (InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
         ItemStack current = e.getCurrentItem();
-        e.setCancelled(true);
+        e.setCancelled(!e.getWhoClicked().getGameMode().equals(GameMode.CREATIVE));
         if(p.getOpenInventory().getTitle().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
             switch(current.getType()) {
                 case DIAMOND_SWORD:
@@ -191,67 +193,84 @@ public class EventListeners implements Listener {
     @EventHandler
     public void sendMessage(PlayerChatEvent e) {
 
-        Player player = e.getPlayer();
-        if(spam.containsKey(player)) {
-            if(spam.get(player) > System.currentTimeMillis()) {
-                player.sendMessage("§cErreur : tu dois attendre entre chaque message !");
+        String msg = e.getMessage();
+        int maj =0;
+        int max=1;
+        String msgsans = msg;
+        for (int k = 0; k < e.getMessage().length(); k++) {
+            if (Character.isUpperCase(msg.charAt(k))) {
+                maj++;
+                char temp = Character.toLowerCase(e.getMessage().charAt(k));
+                char x= e.getMessage().charAt(k);
+                max++;
+                msgsans.replace(x,Character.toLowerCase(x));
+            }
+        }
+        int pourcentage = (maj * 100 )/ max;
+        if(pourcentage >= 30){
+            msg = msgsans;
+        }
+
+        if(msg.startsWith("!!")){
+            msg = "§c[AdminChat] "+getPrefixColor(e.getPlayer())+e.getPlayer().getName()+"§6: "+e.getMessage();
+            msg = msg.replace("!!","");
+            e.setCancelled(true);
+            for (Player p : Bukkit.getOnlinePlayers()){
+                if(p.hasPermission("chat.admin") || p.hasPermission("chat.dev")){
+
+                    p.sendMessage(msg+"");
+                }
+            }
+            return;
+        }
+        if(msg.startsWith("!")){
+            msg = "§d[StaffChat] "+getPrefixColor(e.getPlayer())+e.getPlayer().getName()+"§6: "+e.getMessage();
+            msg = msg.replace("!","");
+            e.setCancelled(true);
+            for (Player p : Bukkit.getOnlinePlayers()){
+                if(p.hasPermission("chat.admin") || p.hasPermission("chat.dev") || p.hasPermission("chat.modo") || p.hasPermission("chat.builder")){
+                    p.sendMessage(msg+"");
+                }
+            }
+            return;
+        }
+
+
+        if (msg.equals("[event cancelled by LiteBans")) return;
+        Player p = e.getPlayer();
+        if (spam.containsKey(p)) {
+            if (spam.get(p) > System.currentTimeMillis()) {
+                p.sendMessage("§cErreur : tu dois attendre entre chaque message !");
                 e.setCancelled(true);
-
-
-
                 return;
             }
 
         }
-        System.out.println(spam.get(player));
-        Long c = System.currentTimeMillis()+(3*1000);
-        spam.put(player, c);
-
-        if(e.getMessage().equalsIgnoreCase(doublemsg.get(player.getPlayer()))){
-            player.sendMessage("§cErreur : impossible d'envoyer 2 fois le même message d'affilé !");
+        Long c = System.currentTimeMillis() + (3 * 1000);
+        if (!(p.hasPermission("chat.dev") || p.hasPermission("chat.admin") || p.hasPermission("chat.modo") || p.hasPermission("chat.builder"))) {
+            spam.put(p, c);
+        }
+        if (e.getMessage().equalsIgnoreCase(doublemsg.get(p.getPlayer()))) {
+            p.sendMessage("§cErreur : impossible d'envoyer 2 fois le même message d'affilé !");
             e.setCancelled(true);
             return;
         }
-        doublemsg.put(e.getPlayer(),e.getMessage());
-
-        try {
-            Player p = e.getPlayer();
-            String msg = e.getMessage();
-            String newMsg = getPrefix(p) + e.getPlayer().getDisplayName() + " §f: ";
-            e.setCancelled(true);
-            if (msg.equals("[event cancelled by LiteBans]")) return;
-            if ((p.hasPermission("chat.admin") || p.hasPermission("chat.dev") || p.hasPermission("chat.modo")) && e.getMessage().startsWith("!")) {
-                if (msg.startsWith("!!") && (p.hasPermission("chat.admin") || p.hasPermission("dp.admin.*") || p.hasPermission("dp.*"))) {
-                    msg = msg.substring(2);
-                    for (ProxiedPlayer reciever : BungeeCord.getInstance().getPlayers()) {
-                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("dp.admin.*") ||
-                                reciever.hasPermission("dp.*")) {
-                            String msgAdminStr = "§d[AdminChat] " + newMsg + msg;
-                            BaseComponent msgAdminBC = null;
-                            msgAdminBC.addExtra(msgAdminStr);
-                            reciever.sendMessage(ChatMessageType.CHAT, msgAdminBC);
-                        }
-                    }
-                    Bukkit.getConsoleSender().sendMessage("§d[AdminChat] " + newMsg + msg);
-
-                } else {
-                    e.setCancelled(true);
-                    msg = msg.substring(1);
-                    for (Player reciever : Bukkit.getOnlinePlayers()) {
-                        if (reciever.hasPermission("chat.admin") || reciever.hasPermission("chat.dev") || reciever.hasPermission("chat.modo")) {
-                            reciever.sendRawMessage("§d[StaffChat] " + newMsg + msg);
-                        }
-                    }
-                    Bukkit.getConsoleSender().sendMessage("§d[AdminChat] " + newMsg + msg);
-                }
-            } else {
-                for (Player players : Bukkit.getOnlinePlayers()) {
-                    players.sendRawMessage(newMsg + msg);
-                }
-                Bukkit.getConsoleSender().sendMessage(newMsg + msg);
+        for (Player players : Bukkit.getOnlinePlayers()) {
+            if (e.getMessage().contains(players.getName())) {
+                msg = msg.replace(players.getName(), "§b"+players.getName()) + "§f";
+                players.playSound(players.getLocation(), Sound.NOTE_PLING, 1, 2);
             }
-        } catch (Exception ee) {
         }
+        if(e.getMessage().contains("@everyone") && (e.getPlayer().hasPermission("chat.admin") || e.getPlayer().hasPermission("chat.dev") || e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.builder")) ){
+            for(Player player2 : Bukkit.getOnlinePlayers()){
+                msg = msg.replace("@everyone","§c§l@everyone");
+                player2.playSound(player2.getLocation(), Sound.NOTE_PLING, 1, 2);
+            }
+
+        }
+        doublemsg.put(e.getPlayer(), e.getMessage());
+        e.setFormat(getPrefix(p)+p.getName()+": §f"+msg);
+
     }
 
     @EventHandler
@@ -365,24 +384,32 @@ public class EventListeners implements Listener {
     }
 
     public static String getPrefix(Player p) {
+        if(p.getName() == "Red_Spash") return "§5[Développeur] §5";
         if (p.hasPermission("chat.admin")) return "§c[Administrateur] §c";
         if (p.hasPermission("chat.dev")) return "§5[Développeur] §5";
         if (p.hasPermission("chat.modo")) return "§6[Modérateur] §6";
         if (p.hasPermission("chat.builder")) return "§9[Builder] §9";
-        if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §4";
         if (p.hasPermission("chat.vip")) return "§b[VIP] §b";
         else return "§7";
     }
+
+    public static String getPrefixColor(Player p) {
+        if (p.hasPermission("chat.admin")) return "§c";
+        if (p.hasPermission("chat.dev")) return "§5";
+        if (p.hasPermission("chat.modo")) return "§6";
+        if (p.hasPermission("chat.builder")) return "§9";
+        if (p.hasPermission("chat.vip")) return "§b";
+        else return "§7";
+    }
+
     public static String getPrefixname(Player p) {
         if (p.hasPermission("chat.admin")) return "§cAdministrateur";
         if (p.hasPermission("chat.dev")) return "§5Développeur";
         if (p.hasPermission("chat.modo")) return "§6Modérateur";
         if (p.hasPermission("chat.builder")) return "§9Builder";
-        if (p.hasPermission("chat.swag")) return "§nSWAG";
         if (p.hasPermission("chat.vip")) return "§bVIP";
         else return "§7Joueur";
     }
-
 
     public static void compassEvent (Event e, Player player, ItemStack it) {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
