@@ -197,8 +197,6 @@ public class EventListeners implements Listener {
                 player.sendMessage("§cErreur : tu dois attendre entre chaque message !");
                 e.setCancelled(true);
 
-
-
                 return;
             }
 
