@@ -43,12 +43,28 @@ public class TImerTaskUpdate extends BukkitRunnable {
         if(Bukkit.getOnlinePlayers().size()!=0){
             ByteArrayDataOutput doss = ByteStreams.newDataOutput();
             doss.writeUTF("PlayerCount");
-            doss.writeUTF("ALL"); // Le nom du srv
+            doss.writeUTF("ALL");
+
+            ByteArrayDataOutput doss2 = ByteStreams.newDataOutput();
+            doss2.writeUTF("PlayerCount");
+            doss2.writeUTF("pvpsoup");
+
+
+            ByteArrayDataOutput doss3 = ByteStreams.newDataOutput();
+            doss3.writeUTF("PlayerCount");
+            doss3.writeUTF("crea");
+
+            // Le nom du srv
             Player player = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
             player.sendPluginMessage(Main.getInstance(), "BungeeCord", doss.toByteArray());
+            player.sendPluginMessage(Main.getInstance(), "BungeeCord", doss2.toByteArray());
+            player.sendPluginMessage(Main.getInstance(), "BungeeCord", doss3.toByteArray());
+
+
             for(Player player2 : Bukkit.getOnlinePlayers()){
                 EventListeners.updateScoreBoard(player2);
             }
+
             
         }
         

@@ -8,6 +8,7 @@ import net.deadpvp.events.EventListeners;
 import net.deadpvp.runnable.TImerTaskUpdate;
 import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -16,6 +17,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 
@@ -23,6 +27,13 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     
     public boolean stopLag = false;
     public int playerCount;
+    public int creatifcount=0;
+    public int pvpsoupcount=0;
+
+    private Connection connection;
+    public String host, database, username, password;
+    public int port;
+
     public ArrayList<Player> hidePlayerOn = new ArrayList<> ();
     
     private static Main instance;
@@ -33,19 +44,55 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     
     @Override
     public void onEnable() {
+        mysqlSetup();
         instance = this;
-        PluginManager pm = Bukkit.getServer ().getPluginManager ();
-        pm.registerEvents (new EventListeners (), this);
-        getCommand ("creatif").setExecutor (new Creatif ());
-        getCommand ("pvpsoup").setExecutor (new Pvpsoup ());
+        PluginManager pm = Bukkit.getServer().getPluginManager ();
+        pm.registerEvents (new EventListeners(), this);
+        getCommand ("creatif").setExecutor(new Creatif ());
+        getCommand ("pvpsoup").setExecutor(new Pvpsoup ());
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "Return", this);
         new TImerTaskUpdate ().runTaskTimer(this, 1L, 20L);
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord",this);
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        saveDefaultConfig();
         super.onEnable ();
     }
-    
+
+    public void mysqlSetup() {
+        host = "localhost";
+        port = 3306;
+        database = "minecraftrebased";
+        username = "root";
+        password = "";
+
+        try {
+
+            synchronized (this) {
+                if (getConnection() != null && !getConnection().isClosed()) {
+                    return;
+                }
+
+                Class.forName("com.mysql.jdbc.Driver");
+                setConnection(DriverManager.getConnection("jdbc:mysql://" + this.host + ":"
+                        + this.port + "/" + this.database, this.username, this.password));
+
+                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL CONNECTED");
+            }
+        } catch (SQLException throwables) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "MYSQL ERROR");
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_RED + "MYSQL ERROR");
+            e.printStackTrace();
+        }
+    }
+    public Connection getConnection() {
+        return connection;
+    }
+
+    private void setConnection(Connection connection) {
+        this.connection = connection;
+    }
+
     public void onPluginMessageReceived(String s, Player player, byte[] bytes) {
         DataInputStream in = new DataInputStream (new ByteArrayInputStream (bytes));
     
@@ -67,29 +114,44 @@ public class Main extends JavaPlugin implements PluginMessageListener {
         String subchannel = ine.readUTF ();
         if (subchannel.equals ("PlayerCount")) {
             String server = ine.readUTF ();
-            playerCount = ine.readInt ();
-            if (playerCount > UtilityFunctions.getmaxco ()) {
-                try {
-    
-                    String content = playerCount + "";
-    
-                    File file = new File ("/home/ubuntu/server/lobby_serv/plugins/DEADPVP/maxco.txt");
-    
-                    if (!file.exists ()) {
-                        file.createNewFile ();
-                    }
-    
-                    FileWriter fw = new FileWriter (file.getAbsoluteFile ());
-                    BufferedWriter bw = new BufferedWriter (fw);
-                    bw.write (content);
-                    bw.close ();
-    
-    
-                } catch (IOException e) {
-                    e.printStackTrace ();
-                }
-    
+
+            if(server.equalsIgnoreCase("pvpsoup")){
+                pvpsoupcount = ine.readInt();
+                return;
             }
+            if(server.equalsIgnoreCase("crea")){
+                creatifcount = ine.readInt();
+                return;
+            }
+
+            if(server.equalsIgnoreCase("all")){
+                playerCount = ine.readInt();
+                if (playerCount > UtilityFunctions.getmaxco ()) {
+                    try {
+
+                        String content = playerCount + "";
+
+                        File file = new File ("/home/ubuntu/server/lobby_serv/plugins/DEADPVP/maxco.txt");
+
+                        if (!file.exists ()) {
+                            file.createNewFile ();
+                        }
+
+                        FileWriter fw = new FileWriter (file.getAbsoluteFile ());
+                        BufferedWriter bw = new BufferedWriter (fw);
+                        bw.write (content);
+                        bw.close ();
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace ();
+                    }
+                    return;
+
+                }
+            }
+
+
             return;
         }
     }

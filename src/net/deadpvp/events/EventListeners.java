@@ -4,6 +4,7 @@ import net.deadpvp.Main;
 import net.deadpvp.utils.ItemBuilder;
 import net.deadpvp.utils.UtilityFunctions;
 
+import net.md_5.bungee.BungeeCord;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -53,11 +54,25 @@ public class EventListeners implements Listener {
     public static void compassEvent (Event e, Player player, ItemStack it) {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
             Inventory inv = Bukkit.createInventory (null, 36, "§2§lSelection du mode de jeu");
-            List<String> lorecrea = Arrays.asList ("§bDescription :", "  §7Construisez seul ou entre amis", "  §7le plot de vos rêves !", "§f ", "§4§lEn maintenance");
+            String jcrea="";
+            String jpvp="";
+            if(Main.getInstance().creatifcount >1){
+                jcrea ="joueurs";
+            }else {
+                jcrea = "joueur";
+            }
+            if(Main.getInstance().pvpsoupcount >1){
+                jpvp ="joueurs";
+            }else {
+                jpvp = "joueur";
+            }
+            String x = "§6>>> "+Main.getInstance().creatifcount+" "+jcrea+" en créatif !";
+            List<String> lorecrea = Arrays.asList ("§bDescription :", "  §7Construisez seul ou entre amis", "  §7le plot de vos rêves !", "§f ", x);
             ItemBuilder grass = new ItemBuilder (Material.GRASS).setLore (lorecrea).setName ("§d§lCREATIF §c§l[EN MAINTENANCE]");
             inv.setItem (11, UtilityFunctions.iSDeleteDatas (grass.toItemStack ()));
-    
-            List<String> lorepvp = Arrays.asList ("§bDescription :", "  §7Un mode de jeu classique de DEADPVP ! ", "  §7Combattez vos ennemis dans une map où les soupes", "  §7peuvent vous sauver la vie !");
+
+            String xx = "§6>>> "+Main.getInstance().pvpsoupcount+" "+jpvp+" en pvpsoup !";
+            List<String> lorepvp = Arrays.asList ("§bDescription :", "  §7Un mode de jeu classique de DEADPVP ! ", "  §7Combattez vos ennemis dans une map où les soupes", "  §7peuvent vous sauver la vie !","§f ",xx);
             ItemBuilder sword = new ItemBuilder (Material.DIAMOND_SWORD).setName ("§c§lPVP§9§lSOUP").addEnchant (Enchantment.ARROW_FIRE, 1).setLore (lorepvp);
             inv.setItem (13, UtilityFunctions.iSDeleteDatas (sword.toItemStack ()));
     
@@ -73,8 +88,17 @@ public class EventListeners implements Listener {
                     inv.setItem (i, UtilityFunctions.voidItem (DyeColor.BROWN));
                 }
             }
-    
-            player.openInventory (inv);
+            if(player.hasPermission("chat.dev") || player.hasPermission("chat.admin")){
+                ItemBuilder Comparator = new ItemBuilder (Material.REDSTONE_COMPARATOR).setName ("§c§lServeur Test 1").setLore ("§7Serveur de test numéro 1");
+                inv.setItem (34, UtilityFunctions.iSDeleteDatas (Comparator.toItemStack ()));
+                ItemBuilder Diode = new ItemBuilder (Material.DIODE).setName ("§c§lServeur Test 2").setLore ("§7Serveur de test numéro 2");
+                inv.setItem (35, UtilityFunctions.iSDeleteDatas (Diode.toItemStack ()));
+            }
+
+
+
+
+                player.openInventory (inv);
     
         }
     }
@@ -96,7 +120,6 @@ public class EventListeners implements Listener {
                 case GRASS:
                     Player player = (Player) e.getWhoClicked();
                     if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")){
-                        
                         UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
                         return;
                     }else{
@@ -110,6 +133,15 @@ public class EventListeners implements Listener {
                         e.getWhoClicked().closeInventory();
                         return;
                     }
+                case REDSTONE_COMPARATOR:
+                    if(p.hasPermission("chat.dev") || p.hasPermission("chat.admin")){
+                        UtilityFunctions.tpToServ(p,"caca");
+                    }
+                case DIODE:
+                    if(p.hasPermission("chat.dev") || p.hasPermission("chat.admin")){
+                        UtilityFunctions.tpToServ(p,"prout");
+                    }
+
                 default:
                     break;
             }
@@ -165,54 +197,70 @@ public class EventListeners implements Listener {
         Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
         Objective obj = board.registerNewObjective("§4§lDEAD§1§lPVP", "dummy");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-        Score score14 = obj.getScore("§b§l---------------§r");
-        Score score13 = obj.getScore("§5§l§r ");
-        Score score12 = obj.getScore("§6>>> Connectés :");
-        //                              "x joueurs"
-        Score score10 = obj.getScore("§4§l ");
-        Score score9 = obj.getScore("§6>>> Connexion simultanée :");
-        //                              "nbr de co "
-        Score score7 = obj.getScore("§5§l§r§c§l ");
-        Score score6 = obj.getScore("§6>>> §6Votre grade :");
-        //                             "GRADE "
-        Score score4 = obj.getScore("§5§l§c§r ");
-        Score score3 = obj.getScore("§dEn cas de bug faites");
-        Score score2 = obj.getScore("§d/bug <votre bug> !");
+        Score score15 = obj.getScore("§c§l§r");
+        Score score14 = obj.getScore("§b§lVOTRE PROFIL");
+        Score score13 = obj.getScore("§f≫ Mystiques : §dA venir...");
+        Score score12 = obj.getScore("§f≫ Karma : §dA venir...");
+        Score score11 = obj.getScore("§f§2 ");
+        Score score10 = obj.getScore("§c§lSERVEUR");
+        Score score6 = obj.getScore("§f§l§c");
+
+        Score score3 = obj.getScore("§7§l§c");
+        //Score score3 = obj.getScore("§dEn cas de bug faites");
+        //Score score2 = obj.getScore("§d/bug <votre bug> !");
         Score score1 = obj.getScore("§c§b§l---------------§r");
-        Score score0 = obj.getScore("§c§lmc.deadpvp.fr");
+        Score score0 = obj.getScore("§b§lmc.deadpvp.com");
         
         score0.setScore(0);
         score1.setScore(1);
-        score2.setScore(2);
-        score3.setScore(3);
-        score4.setScore(4);
+        //score2.setScore(2);
+        //score3.setScore(3);
         score6.setScore(6);
-        score7.setScore(7);
+
+        score3.setScore(3);
+        score11.setScore(11);
+        score15.setScore(15);
+
         score10.setScore(10);
-        score9.setScore(9);
+
         score14.setScore(14);
         score13.setScore(13);
         score12.setScore(12);
-        
-        Team grade = board.registerNewTeam("grade");
-        grade.addEntry(ChatColor.BLACK + "" + ChatColor.MAGIC);
-        grade.setPrefix(getPrefixname(player));
-        obj.getScore(ChatColor.BLACK + "" + ChatColor.MAGIC).setScore(5);
-        
+
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
-        onlineCounter.setPrefix("§b"+ Main.getInstance().playerCount);
-        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(11);
+        onlineCounter.setPrefix(ChatColor.WHITE+"≫ Global :");
+        onlineCounter.setSuffix("§6"+Main.getInstance().playerCount+"");
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(9);
 
         Team maxco = board.registerNewTeam("maxco");
         maxco.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
-        maxco.setPrefix("§bRecord : §b§l0");
-        obj.getScore(ChatColor.BLACK + "" + ChatColor.WHITE).setScore(8);
+        maxco.setPrefix(ChatColor.WHITE+"≫ Connexions ");
+        maxco.setSuffix("§fmax: §c§l"+UtilityFunctions.getmaxco());
+        obj.getScore(ChatColor.BLACK + "" + ChatColor.WHITE).setScore(5);
+
+
+        Team creacounter = board.registerNewTeam("creacounter");
+        creacounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD);
+        creacounter.setPrefix(ChatColor.WHITE+"≫ Creatif: ");
+        creacounter.setSuffix("§6"+Main.getInstance().creatifcount+"");
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.GOLD).setScore(8);
+
+        Team pvpsoupcounter = board.registerNewTeam("pvpsoupcounter");
+        pvpsoupcounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.RED);
+        pvpsoupcounter.setPrefix(ChatColor.WHITE+"≫ PvpSoup: ");
+        pvpsoupcounter.setSuffix("§6"+Main.getInstance().pvpsoupcount+"");
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.RED).setScore(7);
+
+
+
         
         player.setScoreboard(board);
     }
     
     public static void updateScoreBoard(Player player) {
+
+
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
         int x = (22-date.getHours())-1;
@@ -227,10 +275,16 @@ public class EventListeners implements Listener {
         int players = Main.getInstance().playerCount;
         Scoreboard board = player.getScoreboard();
         int max = UtilityFunctions.getmaxco();
-        board.getTeam("onlineCounter").setPrefix("§b"+players);
-        board.getTeam("maxco").setPrefix("§b§l"+max);
-        board.getTeam("grade").setPrefix(getPrefixname(player));
-        
+        board.getTeam("onlineCounter").setPrefix(ChatColor.WHITE+"≫ Global : ");
+        board.getTeam("onlineCounter").setSuffix("§6§l"+Main.getInstance().playerCount);
+        if(board.getTeam("onlineCounter").getName().length() >=16){
+            board.getTeam("onlineCounter").setPrefix("§4Erreur");
+        }
+        board.getTeam("maxco").setSuffix("§fmax: §c§l"+UtilityFunctions.getmaxco());
+        board.getTeam("pvpsoupcounter").setSuffix("§6§l"+Main.getInstance().pvpsoupcount+"");
+        board.getTeam("creacounter").setSuffix("§6§l"+Main.getInstance().creatifcount+"");
+
+
         
     }
     @EventHandler
@@ -250,9 +304,16 @@ public class EventListeners implements Listener {
     public void onBreak(BlockBreakEvent e){
         if(!e.getPlayer ().isOp ()) e.setCancelled (true);
     }
+
+    @EventHandler
+    public void onJoin(PlayerQuitEvent e) {
+        e.setQuitMessage("");
+
+    }
     
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+
         e.getPlayer ().setPlayerListName (getPrefix (e.getPlayer ()) + e.getPlayer ().getName ());
         e.getPlayer ().setGameMode (GameMode.SURVIVAL);
         e.setJoinMessage ("");
@@ -301,8 +362,7 @@ public class EventListeners implements Listener {
             e.setCancelled(true);
             for (Player pl : Bukkit.getOnlinePlayers()){
                 if(pl.hasPermission("chat.admin") || pl.hasPermission("chat.dev")){
-                    
-                    p.sendMessage(msg+"");
+                    pl.sendMessage(msg+"");
                 }
             }
             return;
@@ -330,7 +390,7 @@ public class EventListeners implements Listener {
         }
         if(e.getMessage().contains("@everyone") && (e.getPlayer().hasPermission("chat.admin") || e.getPlayer().hasPermission("chat.dev") || e.getPlayer().hasPermission("chat.modo") || e.getPlayer().hasPermission("chat.builder")) ){
             for(Player player2 : Bukkit.getOnlinePlayers()){
-                msg = msg.replace("@everyone","§c§l@everyone");
+                msg = msg.replace("@everyone","§c§l@everyone§r");
                 player2.playSound(player2.getLocation(), Sound.NOTE_PLING, 1, 2);
             }
             

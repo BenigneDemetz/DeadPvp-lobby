@@ -1,11 +1,12 @@
 package net.deadpvp.commands;
 
-import com.viaversion.viaversion.api.Via;
+
 import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import us.myles.ViaVersion.api.Via;
 
 public class Creatif implements CommandExecutor {
     
