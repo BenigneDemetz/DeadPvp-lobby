@@ -1,13 +1,23 @@
 package net.deadpvp.events;
 
 import net.deadpvp.Main;
+import net.deadpvp.commands.Vanich;
 import net.deadpvp.utils.ItemBuilder;
 import net.deadpvp.utils.UtilityFunctions;
 
+import net.deadpvp.utils.sqlUtilities;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.server.v1_8_R1.Village;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +25,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -23,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.*;
 import org.bukkit.util.Vector;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +42,12 @@ import java.util.TimeZone;
 
 
 public class EventListeners implements Listener {
+    public Team admin;
+    public Team dev;
+    public Team modo;
+    public Team builder;
+    public Team joueur;
+
     @EventHandler
     public void onInteract (PlayerInteractEvent e) {
         Player player = e.getPlayer();
@@ -50,6 +68,46 @@ public class EventListeners implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void command(PlayerCommandPreprocessEvent e){
+        if (( e.getMessage().startsWith("/minecraft:list") || e.getMessage().startsWith("/list") || e.getMessage().startsWith("/pl")
+                || e.getMessage().startsWith("/plugins") || e.getMessage().startsWith("/help")|| e.getMessage().startsWith("/bukkit:pl")
+                || e.getMessage().startsWith("/bukkit:plugins") || e.getMessage().startsWith("/bukkit:?") || e.getMessage().startsWith("/?")
+                || e.getMessage().startsWith("/bukkit:help"))){
+            e.setCancelled(true);
+            e.getPlayer().sendMessage("§fCommande inconnue.");
+        }
+    }
+
+    @EventHandler
+    public void PlayerInteractEntityEvent(PlayerInteractEntityEvent e){
+        Player p = e.getPlayer();
+        Entity entity = e.getRightClicked();
+
+        if(entity instanceof Villager && entity.getName().equalsIgnoreCase("§b§lNEW §2§lVote")){
+            e.setCancelled(true);
+            Inventory inv = Bukkit.createInventory (null, 27, "§2§lVOTE");
+            for(int i=0; i< inv.getSize(); i++){
+                inv.setItem(i,UtilityFunctions.voidItem (DyeColor.GREEN));
+            }
+            List<String> lorevote = Arrays.asList ("  §bVoter pour mettre en ", "  §bavant §4§lDEAD§1§lPVP§b et gagner des", "  §brécompenses !");
+            ItemBuilder grass = new ItemBuilder (Material.NETHER_STAR).setLore (lorevote).setName ("§6§lSITE DE VOTE");
+            inv.setItem (13, UtilityFunctions.iSDeleteDatas (grass.toItemStack ()));
+
+            List<String> loreexpli = Arrays.asList ("§bEn votant vous pouvez gagner :", "  §b1 à 5 Karma", "  §b25 à 35 Mystiques","  §bpar vote !");
+            ItemBuilder book = new ItemBuilder (Material.BOOK).setLore (loreexpli).setName ("§c§lRécompenses");
+            inv.setItem (11, UtilityFunctions.iSDeleteDatas (book.toItemStack ()));
+
+            p.openInventory(inv);
+
+
+        }
+    }
+    @EventHandler
+    public void FallDamage(EntityDamageEvent e){
+        e.setCancelled(true);
+    }
     
     public static void compassEvent (Event e, Player player, ItemStack it) {
         if(it.getType()==Material.COMPASS && it.hasItemMeta() && it.getItemMeta().hasDisplayName() && it.getItemMeta().getDisplayName().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
@@ -68,7 +126,7 @@ public class EventListeners implements Listener {
             }
             String x = "§6>>> "+Main.getInstance().creatifcount+" "+jcrea+" en créatif !";
             List<String> lorecrea = Arrays.asList ("§bDescription :", "  §7Construisez seul ou entre amis", "  §7le plot de vos rêves !", "§f ", x);
-            ItemBuilder grass = new ItemBuilder (Material.GRASS).setLore (lorecrea).setName ("§d§lCREATIF §c§l[EN MAINTENANCE]");
+            ItemBuilder grass = new ItemBuilder (Material.GRASS).setLore (lorecrea).setName ("§d§lCREATIF");
             inv.setItem (11, UtilityFunctions.iSDeleteDatas (grass.toItemStack ()));
 
             String xx = "§6>>> "+Main.getInstance().pvpsoupcount+" "+jpvp+" en pvpsoup !";
@@ -112,14 +170,33 @@ public class EventListeners implements Listener {
         Player p = (Player) e.getWhoClicked();
         ItemStack current = e.getCurrentItem();
         e.setCancelled(true);
+
+        if(p.getOpenInventory().getTitle().equalsIgnoreCase("§2§lVOTE")) {
+
+            switch(current.getType()){
+                case NETHER_STAR:
+                    p.closeInventory();
+                    TextComponent msg = new TextComponent("§f----------------------------\n§b§l       [Site de vote]\n§f----------------------------");
+                    msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§eClique pour ouvrir le site de vote !").create()));
+                    msg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://deadpvp.com/vote"));
+                    p.spigot().sendMessage(msg);
+
+
+
+            }
+        }
+
+
+
         if(p.getOpenInventory().getTitle().equalsIgnoreCase("§2§lSelection du mode de jeu")) {
+            if(current == null)return;
             switch(current.getType()) {
                 case DIAMOND_SWORD:
                     UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "pvpsoup");
                     return;
                 case GRASS:
                     Player player = (Player) e.getWhoClicked();
-                    if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")){
+                    if (player.hasPermission("chat.admin") || player.hasPermission("chat.dev") || player.hasPermission("chat.builder")|| player.hasPermission("deadpvp.join.creatif")){
                         UtilityFunctions.tpToServ((Player) e.getWhoClicked(), "crea");
                         return;
                     }else{
@@ -151,8 +228,8 @@ public class EventListeners implements Listener {
     }
     
     public static String getPrefix(Player p) {
-        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §c";
-        if (p.hasPermission("chat.dev")) return "§5[Développeur] §5";
+        if (p.hasPermission("chat.admin")) return "§4[Admin] §4";
+        if (p.hasPermission("chat.dev")) return "§c[Développeur] §c";
         if (p.hasPermission("chat.modo")) return "§6[Modérateur] §6";
         if (p.hasPermission("chat.builder")) return "§9[Builder] §9";
         //if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §4";
@@ -160,15 +237,17 @@ public class EventListeners implements Listener {
         else return "§7";
     }
     public static String getPrefixname(Player p) {
-        if (p.hasPermission("chat.admin")) return "§cAdministrateur";
-        if (p.hasPermission("chat.dev")) return "§5Développeur";
+        if (p.hasPermission("chat.admin")) return "§4Admin";
+        if (p.hasPermission("chat.dev")) return "§cDéveloppeur";
         if (p.hasPermission("chat.modo")) return "§6Modérateur";
         if (p.hasPermission("chat.builder")) return "§9Builder";
         //if (p.hasPermission("chat.swag")) return "§nSWAG";
         if (p.hasPermission("chat.vip")) return "§bVIP";
         else return "§7Joueur";
     }
-    
+
+
+
     @EventHandler
     public void onMove(PlayerMoveEvent e){
        Player p = e .getPlayer ();
@@ -199,8 +278,6 @@ public class EventListeners implements Listener {
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score score15 = obj.getScore("§c§l§r");
         Score score14 = obj.getScore("§b§lVOTRE PROFIL");
-        Score score13 = obj.getScore("§f≫ Mystiques : §dA venir...");
-        Score score12 = obj.getScore("§f≫ Karma : §dA venir...");
         Score score11 = obj.getScore("§f§2 ");
         Score score10 = obj.getScore("§c§lSERVEUR");
         Score score6 = obj.getScore("§f§l§c");
@@ -224,8 +301,29 @@ public class EventListeners implements Listener {
         score10.setScore(10);
 
         score14.setScore(14);
-        score13.setScore(13);
-        score12.setScore(12);
+
+        Team Mystiques = board.registerNewTeam("Mystiques");
+        Mystiques.addEntry(ChatColor.GOLD + "" + ChatColor.GOLD);
+        Mystiques.setPrefix(ChatColor.WHITE+"§f≫ Mystique");
+        try {
+            Object mystiqueint = sqlUtilities.getData("moneyserv","player",player.getName(),"mystiques","Int");
+            Mystiques.setSuffix("§fs: §d"+ mystiqueint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        obj.getScore(ChatColor.GOLD + "" + ChatColor.GOLD).setScore(13);
+
+
+        Team Karma = board.registerNewTeam("Karma");
+        Karma.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.DARK_PURPLE);
+        Karma.setPrefix(ChatColor.WHITE+"§f≫ Karma: ");
+        try {
+            Object karmaint = sqlUtilities.getData("moneyserv","player",player.getName(),"karma","Int");
+            Karma.setSuffix("§d"+karmaint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        };
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.DARK_PURPLE).setScore(12);
 
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
@@ -275,11 +373,27 @@ public class EventListeners implements Listener {
         int players = Main.getInstance().playerCount;
         Scoreboard board = player.getScoreboard();
         int max = UtilityFunctions.getmaxco();
-        board.getTeam("onlineCounter").setPrefix(ChatColor.WHITE+"≫ Global : ");
+        //board.getTeam("onlineCounter").setPrefix(ChatColor.WHITE+"≫ Global : ");
         board.getTeam("onlineCounter").setSuffix("§6§l"+Main.getInstance().playerCount);
         if(board.getTeam("onlineCounter").getName().length() >=16){
             board.getTeam("onlineCounter").setPrefix("§4Erreur");
         }
+        try {
+            Object karmaint = sqlUtilities.getData("moneyserv","player",player.getName(),"karma","Int");
+            board.getTeam("Karma").setSuffix("§d"+karmaint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        Object mystiqueint = null;
+        try {
+            mystiqueint = sqlUtilities.getData("moneyserv","player",player.getName(),"mystiques","Int");
+            board.getTeam("Mystiques").setSuffix("§fs: §d"+ mystiqueint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
         board.getTeam("maxco").setSuffix("§fmax: §c§l"+UtilityFunctions.getmaxco());
         board.getTeam("pvpsoupcounter").setSuffix("§6§l"+Main.getInstance().pvpsoupcount+"");
         board.getTeam("creacounter").setSuffix("§6§l"+Main.getInstance().creatifcount+"");
@@ -297,22 +411,37 @@ public class EventListeners implements Listener {
     
     @EventHandler
     public void onPlace(BlockPlaceEvent e){
-        if(!e.getPlayer ().isOp ()) e.setCancelled (true);
+        if(!e.getPlayer ().isOp () && e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
     }
     
     @EventHandler
     public void onBreak(BlockBreakEvent e){
-        if(!e.getPlayer ().isOp ()) e.setCancelled (true);
+        if(!e.getPlayer ().isOp () && e.getPlayer().getGameMode() != GameMode.CREATIVE) e.setCancelled (true);
     }
 
     @EventHandler
-    public void onJoin(PlayerQuitEvent e) {
+    public void onLeave(PlayerQuitEvent e) {
         e.setQuitMessage("");
+        
 
     }
     
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        if(!p.hasPermission("deadpvp.vanich")){
+            for(Player playervanished : Vanich.inVanish){
+                p.hidePlayer(playervanished);
+            }
+        }
+        try {
+            if (!sqlUtilities.hasData("moneyserv", "player", p.getName())) {
+                sqlUtilities.insertData("moneyserv", p.getName(), 0, 0, "player, mystiques, karma");
+            }
+        }
+        catch (Exception ee) {
+            ee.printStackTrace();
+        }
 
         e.getPlayer ().setPlayerListName (getPrefix (e.getPlayer ()) + e.getPlayer ().getName ());
         e.getPlayer ().setGameMode (GameMode.SURVIVAL);
@@ -320,6 +449,7 @@ public class EventListeners implements Listener {
         e.getPlayer ().teleport (new Location (e.getPlayer ().getWorld (), 0.5, 50, 0.5, 0, 0));
         e.getPlayer ().getInventory ().clear ();
         UtilityFunctions.initLobby (e.getPlayer ());
+        settab(e.getPlayer());
         setScoreBoard (e.getPlayer ());
         e.getPlayer ().setWalkSpeed ((float) 0.4);
         if (e.getPlayer ().hasPermission ("chat.builder") || e.getPlayer ().hasPermission ("chat.modo") || e.getPlayer ().hasPermission ("chat.admin") || e.getPlayer ().hasPermission ("chat.dev")) {
@@ -397,5 +527,70 @@ public class EventListeners implements Listener {
         }
         e.setFormat(getPrefix(p)+p.getName()+": §f"+msg);
         
+    }
+
+    public void settab(Player pl){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = pl.getScoreboard();
+        admin = board.getTeam("001-Admin");
+        if(admin == null){
+            admin = board.registerNewTeam("001-Admin");
+            admin.setPrefix("§4[Admin] ");
+        }
+
+        dev = board.getTeam("002-Dev");
+        if(dev == null){
+            dev = board.registerNewTeam("002-Dev");
+            dev.setPrefix("§c[Développeur] ");
+        }
+
+        modo = board.getTeam("003-modo");
+        if(modo == null){
+            modo = board.registerNewTeam("003-modo");
+            modo.setPrefix("§6[Modérateur] ");
+        }
+
+        builder = board.getTeam("004-builder");
+        if(builder == null){
+            builder = board.registerNewTeam("004-builder");
+            builder.setPrefix("§9[Builder] ");
+        }
+
+        joueur = board.getTeam("005-joueur");
+        if(joueur == null){
+            joueur = board.registerNewTeam("005-joueur");
+            joueur.setPrefix("§7");
+        }
+
+        if(pl.hasPermission("chat.admin")){
+            pl.setPlayerListName(admin.getPrefix()+pl.getPlayer().getName());
+            admin.addPlayer(pl);
+            admin.addEntry(pl.getName());
+        }else if (pl.hasPermission("chat.dev")){
+            pl.setPlayerListName(dev.getPrefix()+pl.getPlayer().getName());
+            dev.addPlayer(pl);
+            dev.addEntry(pl.getName());
+        }else if (pl.hasPermission("chat.modo")){
+            pl.setPlayerListName(modo.getPrefix()+pl.getPlayer().getName());
+            modo.addPlayer(pl);
+            modo.addEntry(pl.getName());
+        }else if (pl.hasPermission("chat.builder")){
+            pl.setPlayerListName(builder.getPrefix()+pl.getPlayer().getName());
+            builder.addPlayer(pl);
+            builder.addEntry(pl.getName());
+        }else{
+            pl.setPlayerListName(joueur.getPrefix()+pl.getPlayer().getName());
+            joueur.addPlayer(pl);
+            joueur.addEntry(pl.getName());
+        }
+        pl.setScoreboard(board);
+
+
+
+
+    }
+
+    public void createTeamfor(Scoreboard board){
+
     }
 }
