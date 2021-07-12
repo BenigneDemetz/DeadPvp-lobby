@@ -107,12 +107,12 @@ public class CompassGui extends Gui {
 
         //ItemBuilder grass = new ItemBuilder (Material.GRASS).setLore (lorecrea).setName ("§d§lCREATIF §c§l[EN MAINTENANCE]");
         ItemBuilder grass = new ItemBuilder (Material.GRASS)
-                .setLore ("§bDescription :", "  §7Construisez seul ou entre amis", "  §7le plot de vos rêves !", "§f ", "§6>>> "+ Main.getInstance().creatifcount+ "joueurs en créatif !")
+                .setLore ("§bDescription :", "  §7Construisez seul ou entre amis", "  §7le plot de vos rêves !", "§f ", "§6>>> "+ Main.getInstance().creatifcount+ " joueurs en créatif !")
                 .setName ("§d§lCREATIF").hideAttributes();
 
         ItemBuilder sword = new ItemBuilder (Material.DIAMOND_SWORD).setName ("§c§lPVP§9§lSOUP").addEnchant (Enchantment.ARROW_FIRE, 1)
                 .setLore ("§bDescription :", "  §7Un mode de jeu classique de DEADPVP ! ", "  §7Combattez vos ennemis dans une map où les soupes",
-                        "  §7peuvent vous sauver la vie !","§f ", "§6>>> "+Main.getInstance().pvpsoupcount+"joueurs en pvpsoup !").hideAttributes();
+                        "  §7peuvent vous sauver la vie !","§f ", "§6>>> "+Main.getInstance().pvpsoupcount+" joueurs en pvpsoup !").hideAttributes();
 
         ItemBuilder barrier = new ItemBuilder (Material.BARRIER).setName ("§4Maintenance").setLore (" ");
         ItemBuilder paper = new ItemBuilder (Material.PAPER).setName ("§d§lSite de DeadPVP").setLore (" ").hideAttributes();
