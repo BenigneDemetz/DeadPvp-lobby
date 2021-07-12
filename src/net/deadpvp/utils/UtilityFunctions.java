@@ -2,16 +2,12 @@ package net.deadpvp.utils;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import net.deadpvp.utils.ItemBuilder;
 import net.deadpvp.Main;
-import net.minecraft.server.v1_8_R1.Entity;
-import net.minecraft.server.v1_8_R1.EntityLiving;
-import net.minecraft.server.v1_8_R1.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -121,5 +117,15 @@ public class UtilityFunctions {
         }
         it.setItemMeta(itM);
         return it;
+    }
+
+    public static String getPrefix(Player p) {
+        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §c";
+        if (p.hasPermission("chat.dev")) return "§5[Développeur] §5";
+        if (p.hasPermission("chat.modo")) return "§6[Modérateur] §6";
+        if (p.hasPermission("chat.builder")) return "§9[Builder] §9";
+        //if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §4";
+        if (p.hasPermission("chat.vip")) return "§b[VIP] §b";
+        else return "§7";
     }
 }

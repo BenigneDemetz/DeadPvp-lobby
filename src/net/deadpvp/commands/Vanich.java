@@ -4,6 +4,7 @@ import net.deadpvp.Main;
 import net.deadpvp.events.EventListeners;
 import net.deadpvp.utils.AdminInv;
 import net.deadpvp.utils.ItemBuilder;
+import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class Vanich implements CommandExecutor {
                 player.sendMessage("§bVous n'êtes plus en vanish !");
                 player.setAllowFlight(false);
                 player.setFlying(false);
-                player.setPlayerListName(EventListeners.getPrefix(player) +player.getName());
+                player.setPlayerListName(UtilityFunctions.getPrefix(player) +player.getName());
                 inVanish.remove(player);
                 return true;
 

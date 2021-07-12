@@ -2,11 +2,13 @@ package net.deadpvp.scoreboard;
 
 import net.deadpvp.Main;
 import net.deadpvp.utils.UtilityFunctions;
+import net.deadpvp.utils.sqlUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -29,8 +31,6 @@ public class ScoreboardUtils {
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score score15 = obj.getScore("§c§l§r");
         Score score14 = obj.getScore("§b§lVOTRE PROFIL");
-        Score score13 = obj.getScore("§f≫ Mystiques : §dA venir...");
-        Score score12 = obj.getScore("§f≫ Karma : §dA venir...");
         Score score11 = obj.getScore("§f§2 ");
         Score score10 = obj.getScore("§c§lSERVEUR");
         Score score6 = obj.getScore("§f§l§c");
@@ -54,19 +54,40 @@ public class ScoreboardUtils {
         score10.setScore(10);
 
         score14.setScore(14);
-        score13.setScore(13);
-        score12.setScore(12);
+
+        Team Mystiques = board.registerNewTeam("Mystiques");
+        Mystiques.addEntry(ChatColor.GOLD + "" + ChatColor.GOLD);
+        Mystiques.setPrefix(ChatColor.WHITE+"§f≫ Mystique");
+        try {
+            Object mystiqueint = sqlUtilities.getData("moneyserv","player",player.getName(),"mystiques","Int");
+            Mystiques.setSuffix("§fs: §d"+ mystiqueint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        obj.getScore(ChatColor.GOLD + "" + ChatColor.GOLD).setScore(13);
+
+
+        Team Karma = board.registerNewTeam("Karma");
+        Karma.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.DARK_PURPLE);
+        Karma.setPrefix(ChatColor.WHITE+"§f≫ Karma: ");
+        try {
+            Object karmaint = sqlUtilities.getData("moneyserv","player",player.getName(),"karma","Int");
+            Karma.setSuffix("§d"+karmaint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        };
+        obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.DARK_PURPLE).setScore(12);
 
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
         onlineCounter.setPrefix(ChatColor.WHITE+"≫ Global :");
-        onlineCounter.setSuffix("§6"+ Main.getInstance().playerCount+"");
+        onlineCounter.setSuffix("§6"+Main.getInstance().playerCount+"");
         obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(9);
 
         Team maxco = board.registerNewTeam("maxco");
         maxco.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
         maxco.setPrefix(ChatColor.WHITE+"≫ Connexions ");
-        maxco.setSuffix("§fmax: §c§l"+ UtilityFunctions.getmaxco());
+        maxco.setSuffix("§fmax: §c§l"+UtilityFunctions.getmaxco());
         obj.getScore(ChatColor.BLACK + "" + ChatColor.WHITE).setScore(5);
 
 
@@ -81,6 +102,8 @@ public class ScoreboardUtils {
         pvpsoupcounter.setPrefix(ChatColor.WHITE+"≫ PvpSoup: ");
         pvpsoupcounter.setSuffix("§6"+Main.getInstance().pvpsoupcount+"");
         obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.RED).setScore(7);
+
+
 
 
         player.setScoreboard(board);
@@ -103,14 +126,32 @@ public class ScoreboardUtils {
         int players = Main.getInstance().playerCount;
         Scoreboard board = player.getScoreboard();
         int max = UtilityFunctions.getmaxco();
-        board.getTeam("onlineCounter").setPrefix(ChatColor.WHITE+"≫ Global : ");
+        //board.getTeam("onlineCounter").setPrefix(ChatColor.WHITE+"≫ Global : ");
         board.getTeam("onlineCounter").setSuffix("§6§l"+Main.getInstance().playerCount);
         if(board.getTeam("onlineCounter").getName().length() >=16){
             board.getTeam("onlineCounter").setPrefix("§4Erreur");
         }
+        try {
+            Object karmaint = sqlUtilities.getData("moneyserv","player",player.getName(),"karma","Int");
+            board.getTeam("Karma").setSuffix("§d"+karmaint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        Object mystiqueint = null;
+        try {
+            mystiqueint = sqlUtilities.getData("moneyserv","player",player.getName(),"mystiques","Int");
+            board.getTeam("Mystiques").setSuffix("§fs: §d"+ mystiqueint.toString());
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
         board.getTeam("maxco").setSuffix("§fmax: §c§l"+UtilityFunctions.getmaxco());
         board.getTeam("pvpsoupcounter").setSuffix("§6§l"+Main.getInstance().pvpsoupcount+"");
         board.getTeam("creacounter").setSuffix("§6§l"+Main.getInstance().creatifcount+"");
+
+
 
     }
 }
