@@ -120,6 +120,11 @@ public class PlayerListeners implements Listener {
         }
     }
 
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent e){
+        e.setCancelled(true);
+    }
+
 
 
 }

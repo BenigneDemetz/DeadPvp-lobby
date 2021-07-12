@@ -70,7 +70,7 @@ public class CompassGui extends Gui {
                     PvpSoupAdminGui pvpSoupAdminGui = new PvpSoupAdminGui(Main.getPlayerGuiUtils((Player)e.getWhoClicked()));
                     pvpSoupAdminGui.openInv();
                 } else {
-                   UtilityFunctions.tpToServ(playerGuiUtils.getPlayer(), "crea");
+                   UtilityFunctions.tpToServ(playerGuiUtils.getPlayer(), "pvpsoup");
                }
                 break;
 
