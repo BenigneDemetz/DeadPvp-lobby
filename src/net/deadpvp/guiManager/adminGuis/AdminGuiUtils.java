@@ -46,7 +46,7 @@ public class AdminGuiUtils {
 
     public static void adminGuiItems(Inventory inv, String serverName) {
 
-        ItemBuilder redstone_torch = new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("&cMaintenance").hideAttributes();
+        ItemBuilder redstone_torch = new ItemBuilder(Material.REDSTONE_TORCH_ON).setName("§cMaintenance").hideAttributes();
         ItemBuilder barrier = new ItemBuilder(Material.BARRIER).setName("§4Restart le serveur");
 
         inv.setItem(6, barrier.toItemStack());
