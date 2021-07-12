@@ -5,10 +5,12 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import net.deadpvp.Main;
 import net.deadpvp.events.EventListeners;
+import net.deadpvp.scoreboard.ScoreboardUtils;
 import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -62,7 +64,7 @@ public class TImerTaskUpdate extends BukkitRunnable {
 
 
             for(Player player2 : Bukkit.getOnlinePlayers()){
-                EventListeners.updateScoreBoard(player2);
+                ScoreboardUtils.updateScoreBoard(player2);
             }
 
             

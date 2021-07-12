@@ -8,4 +8,5 @@ commands:
     description: Aller sur le serveur créatif
   pvpsoup:
     description: Aller sur le serveur soup
-
+  fixvote:
+    description: Commande admin pour fix le pnj

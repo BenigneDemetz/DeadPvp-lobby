@@ -3,14 +3,19 @@ package net.deadpvp;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import net.deadpvp.commands.Creatif;
+import net.deadpvp.commands.FixVote;
 import net.deadpvp.commands.Pvpsoup;
+import net.deadpvp.events.ChatListeners;
 import net.deadpvp.events.EventListeners;
+import net.deadpvp.events.InventoryListeners;
+import net.deadpvp.events.PlayerListeners;
+import net.deadpvp.guiManager.PlayerGuiUtils;
 import net.deadpvp.runnable.TImerTaskUpdate;
+import net.deadpvp.utils.AdminInv;
 import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -21,6 +26,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class Main extends JavaPlugin implements PluginMessageListener {
@@ -34,8 +40,11 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     public String host, database, username, password;
     public int port;
 
+    public ArrayList<Player> staffModePlayers = new ArrayList<Player>();
     public ArrayList<Player> hidePlayerOn = new ArrayList<> ();
-    
+    public HashMap<Player, AdminInv> adminPlayerHashmap = new HashMap<>();
+    private static final HashMap<Player, PlayerGuiUtils> playerGuiUtilsMap = new HashMap();
+    public static final ArrayList<String> serveurEnMaintenance = new ArrayList<>();
     private static Main instance;
     
     public static Main getInstance() {
@@ -44,17 +53,33 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     
     @Override
     public void onEnable() {
+
         mysqlSetup();
         instance = this;
         PluginManager pm = Bukkit.getServer().getPluginManager ();
         pm.registerEvents (new EventListeners(), this);
+        pm.registerEvents(new ChatListeners(), this);
+        pm.registerEvents(new InventoryListeners(), this);
+        pm.registerEvents(new PlayerListeners(), this);
         getCommand ("creatif").setExecutor(new Creatif ());
         getCommand ("pvpsoup").setExecutor(new Pvpsoup ());
+        getCommand("fixvote").setExecutor(new FixVote());
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "Return", this);
         new TImerTaskUpdate ().runTaskTimer(this, 1L, 20L);
         Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord",this);
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         super.onEnable ();
+    }
+
+    public static PlayerGuiUtils getPlayerGuiUtils(Player p){
+        PlayerGuiUtils playerGuiUtils;
+        if(!playerGuiUtilsMap.containsKey(p)){
+            playerGuiUtils = new PlayerGuiUtils(p);
+            playerGuiUtilsMap.put(p, playerGuiUtils);
+            return playerGuiUtils;
+        } else {
+            return playerGuiUtilsMap.get(p);
+        }
     }
 
     public void mysqlSetup() {
@@ -146,13 +171,11 @@ public class Main extends JavaPlugin implements PluginMessageListener {
                     } catch (IOException e) {
                         e.printStackTrace ();
                     }
-                    return;
 
                 }
             }
 
 
-            return;
         }
     }
 }

@@ -2,11 +2,14 @@ package net.deadpvp.utils;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import net.deadpvp.utils.ItemBuilder;
 import net.deadpvp.Main;
+import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -97,5 +100,32 @@ public class UtilityFunctions {
             Bukkit.getConsoleSender().sendMessage("§c§lWarning : le fichier maxco.txt n'éxiste plus ! Merci de le créer ici : /home/ubuntu/server/lobby_serv/plugins/DEADPVP/");
         }
         return maxco;
+    }
+
+    public static void setAI(LivingEntity entity, boolean hasAi) {
+        EntityLiving handle = ((CraftLivingEntity) entity).getHandle();
+        handle.getDataWatcher().watch(15, (byte) (hasAi ? 0 : 1));
+    }
+
+    public static ItemStack getItemStack(Material material, String customName, Boolean enchantement) {
+        ItemStack it = new ItemStack(material, 1);
+        ItemMeta itM = it.getItemMeta();
+        if(customName != null) itM.setDisplayName(customName);
+        if(enchantement == true) {
+            itM.addEnchant(Enchantment.ARROW_FIRE, 1 ,false);
+            itM.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        it.setItemMeta(itM);
+        return it;
+    }
+
+    public static String getPrefix(Player p) {
+        if (p.hasPermission("chat.admin")) return "§c[Administrateur] §c";
+        if (p.hasPermission("chat.dev")) return "§5[Développeur] §5";
+        if (p.hasPermission("chat.modo")) return "§6[Modérateur] §6";
+        if (p.hasPermission("chat.builder")) return "§9[Builder] §9";
+        //if (p.hasPermission("chat.swag")) return "§4[§cS§eW§aA§bG§9] §4";
+        if (p.hasPermission("chat.vip")) return "§b[VIP] §b";
+        else return "§7";
     }
 }
