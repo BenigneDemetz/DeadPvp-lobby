@@ -20,7 +20,7 @@ public class PvpSoupAdminGui extends Gui {
 
     @Override
     protected String getName() {
-        return "§cMenu Admin > §PvPSoup";
+        return "§cMenu Admin > §c§lPvPSoup";
     }
 
     @Override
