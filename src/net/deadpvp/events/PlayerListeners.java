@@ -82,7 +82,7 @@ public class PlayerListeners implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-        e.setQuitMessage(" ");
+        e.setQuitMessage("");
     }
 
     @EventHandler
@@ -109,14 +109,25 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         Player p = e .getPlayer ();
-        if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)
-        {
-            UtilityFunctions.tpToServ(p, "pvpsoup");
-            System.out.println(p.getName()+" est partie sur le pvpsoup.");
-            p.setVelocity(new Vector(0,2,-5));
+        if (p.getLocation().getZ() >= 71.701 && Math.abs(p.getLocation().getX()) <= 12 && p.getLocation().getZ() <= 73)  {
+            if(!Main.serveurEnMaintenance.contains("pvpsoup")){
+                UtilityFunctions.tpToServ(p, "pvpsoup");
+                System.out.println(p.getName()+" est partie sur le pvpsoup.");
+                p.setVelocity(new Vector(0,2,-5));
+            } else {
+                p.sendMessage("§4Serveur en Maintenance.");
+                p.setVelocity(new Vector(0,2,-5));
+            }
         }
         if(p.getLocation().getX()<=-70.701 && Math.abs(p.getLocation().getZ())<=12 && p.getLocation().getX()<=-70.701){
-            p.setVelocity(new Vector(5,2,0));
+            if(!Main.serveurEnMaintenance.contains("crea")){
+                UtilityFunctions.tpToServ(p, "crea");
+                System.out.println(p.getName()+" est partie sur le créatif.");
+                p.setVelocity(new Vector(0,2,-5));
+            } else {
+                p.sendMessage("§4Serveur en Maintenance.");
+                p.setVelocity(new Vector(5,2,0));
+            }
         }
     }
 

@@ -80,7 +80,7 @@ public class ScoreboardUtils {
 
         Team onlineCounter = board.registerNewTeam("onlineCounter");
         onlineCounter.addEntry(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC);
-        onlineCounter.setPrefix(ChatColor.WHITE+"≫ Global :");
+        onlineCounter.setPrefix(ChatColor.WHITE+"≫ Global: ");
         onlineCounter.setSuffix("§6"+Main.getInstance().playerCount+"");
         obj.getScore(ChatColor.LIGHT_PURPLE + "" + ChatColor.MAGIC).setScore(9);
 
