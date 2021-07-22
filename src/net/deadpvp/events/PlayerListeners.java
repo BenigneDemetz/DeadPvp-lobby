@@ -22,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,21 +33,9 @@ public class PlayerListeners implements Listener {
 
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void onJoin(PlayerJoinEvent e) throws SQLException {
         Player p = e.getPlayer();
-        if(!p.hasPermission("deadpvp.vanich")){
-            for(Player playervanished : Vanich.inVanish){
-                p.hidePlayer(playervanished);
-            }
-        }
-        try {
-            if (!sqlUtilities.hasData("moneyserv", "player", p.getName())) {
-                sqlUtilities.insertData("moneyserv", p.getName(), 0, 0, "player, mystiques, karma");
-            }
-        }
-        catch (Exception ee) {
-            ee.printStackTrace();
-        }
+
 
         e.getPlayer ().setPlayerListName (UtilityFunctions.getPrefix (e.getPlayer ()) + e.getPlayer ().getName ());
         e.getPlayer ().setGameMode (GameMode.SURVIVAL);
@@ -57,7 +46,7 @@ public class PlayerListeners implements Listener {
         TabUtils.settab(e.getPlayer());
         ScoreboardUtils.setScoreBoard (e.getPlayer ());
         e.getPlayer ().setWalkSpeed ((float) 0.4);
-        if (e.getPlayer ().hasPermission ("chat.builder") || e.getPlayer ().hasPermission ("chat.modo") || e.getPlayer ().hasPermission ("chat.admin") || e.getPlayer ().hasPermission ("chat.dev")) {
+        if ((e.getPlayer ().hasPermission ("chat.builder") || e.getPlayer ().hasPermission ("chat.modo") || e.getPlayer ().hasPermission ("chat.admin") || e.getPlayer ().hasPermission ("chat.dev")) && sqlUtilities.getData("staffutilities", "staff",p.getName(), "vanished", "Boolean").equals(false)) {
             Bukkit.broadcastMessage ("§7[§4§lD§9§lP§7] " + UtilityFunctions.getPrefix (e.getPlayer ()) + e.getPlayer ().getName () + " §6vient de rejoindre le lobby !");
             e.getPlayer ().getWorld ().strikeLightningEffect (e.getPlayer ().getLocation ());
         }
@@ -65,6 +54,26 @@ public class PlayerListeners implements Listener {
             if(Main.getInstance ().hidePlayerOn.contains (pls)){
                 pls.hidePlayer (e.getPlayer ());
             }
+        }
+        if (sqlUtilities.hasData("staffdetails","staff", p.getName())) {
+            if (sqlUtilities.getData("staffdetails", "staff", p.getName(), "vanished", "Boolean").equals(true))
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    if (!onlinePlayer.hasPermission("deadpvp.vanish"))
+                        onlinePlayer.hidePlayer(p);
+                }
+        }
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (sqlUtilities.getData("staffdetails", "staff", onlinePlayer.getName(), "vanished", "Boolean").equals(true))
+                p.hidePlayer(onlinePlayer);
+        }
+
+        try {
+            if (!sqlUtilities.hasData("moneyserv", "player", p.getName())) {
+                sqlUtilities.insertData("moneyserv", p.getName(), 0, 0, "player, mystiques, karma");
+            }
+        }
+        catch (Exception ee) {
+            ee.printStackTrace();
         }
     }
 

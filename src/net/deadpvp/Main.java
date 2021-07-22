@@ -54,6 +54,7 @@ public class Main extends JavaPlugin implements PluginMessageListener {
     @Override
     public void onEnable() {
 
+
         mysqlSetup();
         instance = this;
         PluginManager pm = Bukkit.getServer().getPluginManager ();

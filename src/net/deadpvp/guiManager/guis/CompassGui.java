@@ -3,10 +3,7 @@ package net.deadpvp.guiManager.guis;
 import net.deadpvp.Main;
 import net.deadpvp.guiManager.Gui;
 import net.deadpvp.guiManager.PlayerGuiUtils;
-import net.deadpvp.guiManager.adminGuis.CreaAdminGui;
-import net.deadpvp.guiManager.adminGuis.PvpSoupAdminGui;
-import net.deadpvp.guiManager.adminGuis.ServeurTest1AdminGui;
-import net.deadpvp.guiManager.adminGuis.ServeurTest2AdminGui;
+import net.deadpvp.guiManager.adminGuis.*;
 import net.deadpvp.utils.ItemBuilder;
 import net.deadpvp.utils.UtilityFunctions;
 import org.bukkit.DyeColor;
@@ -97,6 +94,16 @@ public class CompassGui extends Gui {
                 e.getWhoClicked().sendMessage("§2§ldeadpvp.fr");
                 e.getWhoClicked().closeInventory();
                 break;
+            case WOOD_AXE:
+                if(e.getClick().equals(ClickType.LEFT) && (playerGuiUtils.getPlayer().hasPermission("chat.admin") || playerGuiUtils.getPlayer().hasPermission("chat.dev")
+                || playerGuiUtils.getPlayer().hasPermission("chat.builder"))){
+                    UtilityFunctions.tpToServ(playerGuiUtils.getPlayer(), "build");
+                } else if(e.getClick().equals(ClickType.RIGHT)){
+                    Builder builder = new Builder(Main.getPlayerGuiUtils((Player)e.getWhoClicked()));
+                    builder.openInv();
+                }
+                break;
+
             default:
                 break;
         }
@@ -125,8 +132,15 @@ public class CompassGui extends Gui {
             ItemBuilder comparator = new ItemBuilder (Material.REDSTONE_COMPARATOR).setName ("§c§lServeur Test 1").setLore ("§7Serveur de test numéro 1", "§4Clique Droit > Admin menu").hideAttributes();
             ItemBuilder diode = new ItemBuilder (Material.DIODE).setName ("§c§lServeur Test 2").setLore ("§7Serveur de test numéro 2", "§4Clique droit > Admin Menu").hideAttributes();
 
+
             inv.setItem (34, comparator.toItemStack ());
             inv.setItem (35, diode.toItemStack ());
+        }
+        if (playerGuiUtils.getPlayer().hasPermission("chat.builder")) {
+            ItemBuilder builder = new ItemBuilder (Material.WOOD_AXE).setName ("§c§lServeur Build").setLore ("§7Serveur de Build",
+                    "§4Clique droit > Admin Menu").hideAttributes();
+
+            inv.setItem(27, builder.toItemStack());
         }
 
         if(Main.serveurEnMaintenance.contains("crea")){

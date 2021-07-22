@@ -62,10 +62,20 @@ public class sqlUtilities {
         insert.close();
     }
 
-    public static void updateData (String table, String nameColumn, Object data, String player) throws SQLException {
+    public static void insertData(String table, String playerName, boolean bool,
+                                  String columnsToInsert) throws SQLException {
+        Connection connection = Main.getInstance().getConnection();
+        PreparedStatement insert =
+                connection.prepareStatement(
+                        "INSERT INTO "+ table + " (" + columnsToInsert + ") VALUES ('" +playerName  + "', " + bool + ")");
+        insert.execute();
+        insert.close();
+    }
+
+    public static void updateData (String table, String nameColumn, Object data, String dataToMatch, String player) throws SQLException {
         Connection connection = Main.getInstance().getConnection();
         PreparedStatement modifyStats =
-                connection.prepareStatement("UPDATE "+ table + " SET " + nameColumn +"=" + data + " WHERE player='" + player + "';");
+                connection.prepareStatement("UPDATE "+ table + " SET " + nameColumn +"=" + data + " WHERE " + dataToMatch + "='" + player + "';");
         modifyStats.execute();
         modifyStats.close();
     }

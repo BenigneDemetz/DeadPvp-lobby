@@ -64,6 +64,7 @@ public class TImerTaskUpdate extends BukkitRunnable {
 
 
             for(Player player2 : Bukkit.getOnlinePlayers()){
+                if (player2.getScoreboard() == null) ScoreboardUtils.setScoreBoard(player2);
                 ScoreboardUtils.updateScoreBoard(player2);
             }
 

@@ -111,6 +111,11 @@ public class ScoreboardUtils {
 
     public static void updateScoreBoard(Player player) {
 
+        if (player.getScoreboard() == null) {
+            setScoreBoard(player);
+            return;
+        }
+
 
         TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
         Date date = new Date();
